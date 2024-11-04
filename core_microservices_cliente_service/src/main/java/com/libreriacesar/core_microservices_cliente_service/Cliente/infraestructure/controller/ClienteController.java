@@ -5,6 +5,7 @@ import com.libreriacesar.core_microservices_cliente_service.Cliente.domain.Clien
 import com.libreriacesar.core_microservices_cliente_service.Cliente.domain.Mappers.ClienteMapper;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.domain.Presupuesto;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.controller.DTO.ClienteModel;
+import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.controller.DTO.output.ClientePresupuestoDTO;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.controller.DTO.output.ClienteSalida;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.repository.port.ClienteRepository;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.repository.port.PresupuestoRepository;
@@ -13,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -74,8 +74,11 @@ public class ClienteController {
         return ResponseEntity.ok(clientesSalida);
     }
 
-
-
+    @GetMapping("/{clienteId}/conPresupuesto")
+    public ResponseEntity<ClientePresupuestoDTO> obtenerClienteConPresupuesto(@PathVariable String clienteId) {
+        ClientePresupuestoDTO response = clienteUseCase.findClienteAndPresupuestoByClientId(clienteId);
+        return ResponseEntity.ok(response);
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> eliminarCliente(@PathVariable String id) {

@@ -18,7 +18,7 @@ import java.util.UUID;
 public class Presupuesto extends MainTable {
 
     public static  String PATTERN_PK = "clientId#";
-    public static final String PATTERN_SK = "presupuestoId#";
+    public static final String PATTERN_SK = "presupuestoId";
     public static final String ENTITY_TYPE = "CLIENT_PRESUPUESTO";
 
     @ApiModelProperty(notes = "id del presupuesto del cliente", required = true, example = "B12345678")
@@ -45,13 +45,11 @@ public class Presupuesto extends MainTable {
 
     public Presupuesto(String clientId) {
         super(PATTERN_PK + clientId, PATTERN_SK);
-        this.presupuestoId = UUID.randomUUID().toString();  // Genera un ID único para presupuesto
-        setPk();  // Establece PK usando el patrón
-        setSk();
+
     }
 
     public void setPk() {
-        super.setPk(PATTERN_PK + presupuestoId);  // Usa el presupuestoId para formar la PK
+        super.setPk(PATTERN_PK + this.clientId);
     }
 
     public void setSk() {

@@ -4,6 +4,8 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.domain.Cliente;
+import com.libreriacesar.core_microservices_cliente_service.Cliente.domain.Presupuesto;
+import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.controller.DTO.output.ClientePresupuestoDTO;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.repository.port.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -40,6 +42,18 @@ public class ClienteRepositoryImpl implements ClienteRepository {
         return dynamoDBMapper.scan(Cliente.class, scanExpression);
     }
 
+
+    public ClientePresupuestoDTO findClienteAndPresupuestoByClientId(String clientId) {
+        Cliente cliente = dynamoDBMapper.load(Cliente.class, clientId, Cliente.PATTERN_SK);
+
+        if (cliente == null) {
+            throw new RuntimeException("Cliente no encontrado con ID: " + clientId);
+        }
+
+        Presupuesto presupuesto = dynamoDBMapper.load(Presupuesto.class, clientId, Presupuesto.PATTERN_SK);
+
+        return new ClientePresupuestoDTO(cliente, presupuesto);
+    }
 
 
     @Override

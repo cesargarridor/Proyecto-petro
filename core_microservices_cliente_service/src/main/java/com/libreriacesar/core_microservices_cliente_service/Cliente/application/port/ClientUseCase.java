@@ -2,6 +2,7 @@ package com.libreriacesar.core_microservices_cliente_service.Cliente.application
 
 import com.libreriacesar.core_microservices_cliente_service.Cliente.domain.Cliente;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.controller.DTO.ClienteModel;
+import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.controller.DTO.output.ClientePresupuestoDTO;
 
 import java.util.List;
 
@@ -12,4 +13,5 @@ public interface ClientUseCase {
     void deleteCliente(String id);
     void updateCliente(ClienteModel clienteModel);
     List<Cliente> findAllClientesBySk(String skValue);
+    ClientePresupuestoDTO findClienteAndPresupuestoByClientId(String clientId);
 }
