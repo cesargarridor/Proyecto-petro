@@ -48,7 +48,12 @@ public class ClienteController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> eliminarCliente(@PathVariable String id) {
-        clienteUseCase.deleteCliente(id);
-        return ResponseEntity.ok("Cliente eliminado");
+        try {
+            clienteUseCase.deleteCliente(id);
+            return ResponseEntity.ok("Cliente eliminado");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
+
 }

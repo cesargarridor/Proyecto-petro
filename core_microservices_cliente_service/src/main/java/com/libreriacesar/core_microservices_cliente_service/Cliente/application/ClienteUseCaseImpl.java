@@ -22,7 +22,7 @@ public class ClienteUseCaseImpl implements ClientUseCase {
     public Cliente createCliente(ClienteModel clienteModel) {
         Cliente cliente = new Cliente();
 
-        cliente.setPk();
+        cliente.setPk(clienteModel.getClientId());
         cliente.setSk();
         cliente.setgIndexPk(clienteModel.getNombre());
         cliente.setgIndex2Pk(clienteModel.getCIF());
@@ -57,6 +57,9 @@ public class ClienteUseCaseImpl implements ClientUseCase {
         Cliente cliente = getClienteById(id);
         if (cliente != null) {
             clienteRepository.delete(cliente);
+        } else {
+            throw new RuntimeException("Cliente no encontrado con ID: " + id);
         }
     }
+
 }
