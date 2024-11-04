@@ -10,4 +10,5 @@ public interface ClientUseCase {
     Cliente getClienteById(String id);
     List<Cliente> getAllClientes();
     void deleteCliente(String id);
+    void updateCliente(ClienteModel clienteModel);
 }

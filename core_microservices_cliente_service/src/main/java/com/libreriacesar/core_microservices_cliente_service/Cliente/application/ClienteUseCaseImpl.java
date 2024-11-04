@@ -36,7 +36,6 @@ public class ClienteUseCaseImpl implements ClientUseCase {
         cliente.setEstado(clienteModel.isEstado());
         cliente.setCif(clienteModel.getCIF());
 
-        System.out.println(cliente);
         clienteRepository.save(cliente);
 
         return cliente;
@@ -59,6 +58,26 @@ public class ClienteUseCaseImpl implements ClientUseCase {
             clienteRepository.delete(cliente);
         } else {
             throw new RuntimeException("Cliente no encontrado con ID: " + id);
+        }
+    }
+    @Override
+    public void updateCliente(ClienteModel clienteModel) {
+        Cliente cliente = getClienteById(clienteModel.getClientId());
+        if (cliente != null) {
+            cliente.setgIndexPk(clienteModel.getNombre());
+            cliente.setgIndex2Pk(clienteModel.getCIF());
+            cliente.setgIndex3Pk(clienteModel.getTelefono());
+
+            cliente.setEmail(clienteModel.getEmail());
+            cliente.setTelefono(clienteModel.getTelefono());
+            cliente.setDireccion(clienteModel.getDireccion());
+            cliente.setEstado(clienteModel.isEstado());
+            cliente.setCif(clienteModel.getCIF());
+
+
+            clienteRepository.save(cliente);
+        } else {
+            throw new RuntimeException("Cliente no encontrado con ID: " + clienteModel.getClientId());
         }
     }
 

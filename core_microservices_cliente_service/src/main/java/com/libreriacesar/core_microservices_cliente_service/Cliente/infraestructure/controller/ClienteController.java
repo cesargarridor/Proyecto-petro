@@ -56,4 +56,15 @@ public class ClienteController {
         }
     }
 
+    @PutMapping("/actualizar")
+    public ResponseEntity<String> actualizarCliente(@RequestBody ClienteModel clienteModel) {
+        try {
+            clienteUseCase.updateCliente(clienteModel);
+            return ResponseEntity.ok("Cliente actualizado");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+
 }
