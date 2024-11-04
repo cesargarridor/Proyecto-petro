@@ -8,7 +8,6 @@ public class CoreMicroservicesClienteServiceApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(CoreMicroservicesClienteServiceApplication.class, args);
-
     }
 
 }
