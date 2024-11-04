@@ -2,10 +2,13 @@ package com.libreriacesar.core_microservices_cliente_service.Cliente.application
 
 import com.libreriacesar.core_microservices_cliente_service.Cliente.application.port.ClientUseCase;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.domain.Cliente;
+import com.libreriacesar.core_microservices_cliente_service.Cliente.domain.Presupuesto;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.controller.DTO.ClienteModel;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.repository.port.ClienteRepository;
+import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.repository.port.PresupuestoRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -13,9 +16,11 @@ public class ClienteUseCaseImpl implements ClientUseCase {
 
     private final ClienteRepository clienteRepository;
 
+    private PresupuestoRepository presupuestoRepository;
 
-    public ClienteUseCaseImpl(ClienteRepository clienteRepository) {
+    public ClienteUseCaseImpl(ClienteRepository clienteRepository, PresupuestoRepository presupuestoRepository) {
         this.clienteRepository = clienteRepository;
+        this.presupuestoRepository = presupuestoRepository;
     }
 
     @Override
@@ -37,6 +42,19 @@ public class ClienteUseCaseImpl implements ClientUseCase {
         cliente.setCif(clienteModel.getCif());
 
         clienteRepository.save(cliente);
+
+        if (clienteModel.getPresupuesto() != null) {
+            Presupuesto presupuesto = new Presupuesto(cliente.getClientId());
+            presupuesto.setPk(clienteModel.getClientId());
+            presupuesto.setSk();
+
+            presupuesto.setCantidad(clienteModel.getPresupuesto().getCantidad());
+            presupuesto.setEnabled(clienteModel.getPresupuesto().isEnabled());
+            presupuesto.setFecha_Creacion(clienteModel.getPresupuesto().getFecha_Creacion());
+
+            presupuestoRepository.save(presupuesto);
+        }
+
 
         return cliente;
     }

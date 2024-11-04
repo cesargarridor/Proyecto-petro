@@ -3,13 +3,16 @@ package com.libreriacesar.core_microservices_cliente_service.Cliente.infraestruc
 import com.libreriacesar.core_microservices_cliente_service.Cliente.application.port.ClientUseCase;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.domain.Cliente;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.domain.Mappers.ClienteMapper;
+import com.libreriacesar.core_microservices_cliente_service.Cliente.domain.Presupuesto;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.controller.DTO.ClienteModel;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.controller.DTO.output.ClienteSalida;
+import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.repository.port.PresupuestoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,7 +20,9 @@ import java.util.stream.Collectors;
 @RequestMapping("/clientes")
 public class ClienteController {
 
+    private ClienteMapper clienteMapper;
     private final ClientUseCase clienteUseCase;
+    private PresupuestoRepository presupuestoRepository;
 
     @Autowired
     public ClienteController(ClientUseCase clienteService) {
@@ -29,7 +34,9 @@ public class ClienteController {
     public ResponseEntity<String> crearCliente(@RequestBody ClienteModel clienteModel) {
         System.out.println("Cliente recibido: " + clienteModel);
 
-        Cliente cliente= clienteUseCase.createCliente(clienteModel);
+        clienteUseCase.createCliente(clienteModel);
+
+
         return ResponseEntity.status(HttpStatus.CREATED).body("Cliente creado");
     }
     @GetMapping("/{id}")

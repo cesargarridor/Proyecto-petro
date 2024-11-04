@@ -41,6 +41,9 @@ public class Presupuesto extends MainTable {
     @NotBlank
     private Boolean enabled;
 
+    public Presupuesto(String clientId) {
+    }
+
 
     public void setPk() {
         super.setPk(PATTERN_PK + this.presupuestoId);

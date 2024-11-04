@@ -15,4 +15,5 @@ public class ClienteModel {
     private String direccion;
     private boolean estado;
     private String cif;
+    private PresupuestoModel presupuesto;
 }
