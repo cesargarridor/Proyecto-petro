@@ -104,4 +104,10 @@ public class ClienteUseCaseImpl implements ClientUseCase {
         }
     }
 
+    @Override
+    public List<Cliente> findAllClientesBySk(String skValue) {
+        return clienteRepository.findAllClientesBySk(skValue);
+    }
+
+
 }

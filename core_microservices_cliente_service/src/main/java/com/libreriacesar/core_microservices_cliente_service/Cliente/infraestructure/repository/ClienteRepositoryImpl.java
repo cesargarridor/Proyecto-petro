@@ -2,12 +2,14 @@ package com.libreriacesar.core_microservices_cliente_service.Cliente.infraestruc
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.domain.Cliente;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.repository.port.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class ClienteRepositoryImpl implements ClienteRepository {
@@ -26,6 +28,19 @@ public class ClienteRepositoryImpl implements ClienteRepository {
         }
         dynamoDBMapper.save(cliente);
     }
+
+    private static final String TABLE_NAME = "MainTable";
+    private static final String INDEX_NAME = "sk";
+
+    public List<Cliente> findAllClientesBySk(String skValue) {
+        DynamoDBScanExpression scanExpression = new DynamoDBScanExpression()
+                .withFilterExpression("SK = :skValue")
+                .withExpressionAttributeValues(Map.of(":skValue", new AttributeValue().withS(skValue)));
+
+        return dynamoDBMapper.scan(Cliente.class, scanExpression);
+    }
+
+
 
     @Override
     public Cliente findById(String id) {

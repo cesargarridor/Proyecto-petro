@@ -18,4 +18,5 @@ public interface ClienteRepository {
     List<Cliente> findByEstadoTrue();
 
     List<Cliente> findByEstadoFalse();
+    List<Cliente> findAllClientesBySk(String skValue);
 }

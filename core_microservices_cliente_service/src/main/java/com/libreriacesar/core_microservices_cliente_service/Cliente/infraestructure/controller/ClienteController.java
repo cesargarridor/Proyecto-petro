@@ -55,16 +55,26 @@ public class ClienteController {
     }
 
 
-
-    @GetMapping("/")
-    public ResponseEntity<List<ClienteSalida>> obtenerTodosLosClientes() {
-        List<Cliente> clientes = clienteUseCase.getAllClientes();
+    @GetMapping("/buscarPorSk")
+    public ResponseEntity<List<ClienteSalida>> buscarClientesPorSk(@RequestParam String skValue) {
+        List<Cliente> clientes = clienteUseCase.findAllClientesBySk(skValue);
         List<ClienteSalida> clientesSalida = clientes.stream()
                 .map(ClienteMapper.INSTANCE::clienteToClienteSalida)
                 .collect(Collectors.toList());
-
         return ResponseEntity.ok(clientesSalida);
     }
+
+    @GetMapping("/")
+    public ResponseEntity<List<ClienteSalida>> buscarTodosLosClientes() {
+        String skValue="clientData";
+        List<Cliente> clientes = clienteUseCase.findAllClientesBySk(skValue);
+        List<ClienteSalida> clientesSalida = clientes.stream()
+                .map(ClienteMapper.INSTANCE::clienteToClienteSalida)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(clientesSalida);
+    }
+
+
 
 
     @DeleteMapping("/{id}")

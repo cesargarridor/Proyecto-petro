@@ -17,7 +17,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @ApiModel(description = "Modelo para la entidad Cliente")
-@DynamoDBTable(tableName = "MainTable")
 public class Cliente extends MainTable {
 
     public static  String PATTERN_PK = "clientId#";

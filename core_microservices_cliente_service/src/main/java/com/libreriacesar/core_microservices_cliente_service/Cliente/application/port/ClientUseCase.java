@@ -11,4 +11,5 @@ public interface ClientUseCase {
     List<Cliente> getAllClientes();
     void deleteCliente(String id);
     void updateCliente(ClienteModel clienteModel);
+    List<Cliente> findAllClientesBySk(String skValue);
 }
