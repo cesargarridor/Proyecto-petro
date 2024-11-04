@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ClienteUseCaseImpl implements ClientUseCase {
@@ -51,8 +52,10 @@ public class ClienteUseCaseImpl implements ClientUseCase {
 
         if (clienteModel.getPresupuesto() != null) {
             Presupuesto presupuesto = new Presupuesto(cliente.getClientId());
+            presupuesto.setPresupuestoId(cliente.getClientId());
             presupuesto.setPk(cliente.getClientId());
             presupuesto.setSk();
+
             presupuesto.setCantidad(clienteModel.getPresupuesto().getCantidad());
             presupuesto.setEnabled(clienteModel.getPresupuesto().isEnabled());
             presupuesto.setFecha_Creacion(clienteModel.getPresupuesto().getFecha_Creacion());
@@ -115,5 +118,14 @@ public class ClienteUseCaseImpl implements ClientUseCase {
         return clienteRepository.findClienteAndPresupuestoByClientId(clientId);
     }
 
+    public List<ClientePresupuestoDTO> listarClientesConPresupuesto() {
+        List<Cliente> clientes = clienteRepository.findAll();
+
+        return clientes.stream().map(cliente -> {
+            Presupuesto presupuesto = presupuestoRepository.findById(cliente.getClientId());
+
+            return new ClientePresupuestoDTO(cliente, presupuesto);
+        }).collect(Collectors.toList());
+    }
 
 }

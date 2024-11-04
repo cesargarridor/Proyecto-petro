@@ -31,8 +31,7 @@ public class ClienteRepositoryImpl implements ClienteRepository {
         dynamoDBMapper.save(cliente);
     }
 
-    private static final String TABLE_NAME = "MainTable";
-    private static final String INDEX_NAME = "sk";
+
 
     public List<Cliente> findAllClientesBySk(String skValue) {
         DynamoDBScanExpression scanExpression = new DynamoDBScanExpression()

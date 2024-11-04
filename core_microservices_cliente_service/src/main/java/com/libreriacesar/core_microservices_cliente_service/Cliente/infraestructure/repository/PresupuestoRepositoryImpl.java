@@ -1,6 +1,7 @@
 package com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.repository;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.libreriacesar.core_microservices_cliente_service.Cliente.domain.Cliente;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.domain.Presupuesto;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.repository.port.PresupuestoRepository;
 import org.springframework.stereotype.Repository;
@@ -23,7 +24,7 @@ public class PresupuestoRepositoryImpl implements PresupuestoRepository {
 
     @Override
     public Presupuesto findById(String id) {
-        return null;
+        return dynamoDBMapper.load(Presupuesto.class, id);
     }
 
     @Override

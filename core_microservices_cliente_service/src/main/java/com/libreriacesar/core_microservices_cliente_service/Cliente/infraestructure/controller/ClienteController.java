@@ -80,6 +80,11 @@ public class ClienteController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/findAll")
+    public ResponseEntity<List<ClientePresupuestoDTO>> obtenerClientesEnteros(){
+        return ResponseEntity.ok(clienteUseCase.listarClientesConPresupuesto());
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> eliminarCliente(@PathVariable String id) {
         try {

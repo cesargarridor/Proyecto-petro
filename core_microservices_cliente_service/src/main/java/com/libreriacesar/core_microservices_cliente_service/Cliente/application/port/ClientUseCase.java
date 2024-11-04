@@ -14,4 +14,5 @@ public interface ClientUseCase {
     void updateCliente(ClienteModel clienteModel);
     List<Cliente> findAllClientesBySk(String skValue);
     ClientePresupuestoDTO findClienteAndPresupuestoByClientId(String clientId);
+    List<ClientePresupuestoDTO> listarClientesConPresupuesto();
 }
