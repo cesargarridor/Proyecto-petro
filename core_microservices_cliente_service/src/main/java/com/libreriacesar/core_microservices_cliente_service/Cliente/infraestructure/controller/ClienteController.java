@@ -2,13 +2,16 @@ package com.libreriacesar.core_microservices_cliente_service.Cliente.infraestruc
 
 import com.libreriacesar.core_microservices_cliente_service.Cliente.application.port.ClientUseCase;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.domain.Cliente;
+import com.libreriacesar.core_microservices_cliente_service.Cliente.domain.Mappers.ClienteMapper;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.controller.DTO.ClienteModel;
+import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.controller.DTO.output.ClienteSalida;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/clientes")
@@ -29,22 +32,29 @@ public class ClienteController {
         Cliente cliente= clienteUseCase.createCliente(clienteModel);
         return ResponseEntity.status(HttpStatus.CREATED).body("Cliente creado");
     }
-
     @GetMapping("/{id}")
-    public ResponseEntity<Cliente> obtenerCliente(@PathVariable String id) {
+    public ResponseEntity<ClienteSalida> obtenerCliente(@PathVariable String id) {
         Cliente cliente = clienteUseCase.getClienteById(id);
         if (cliente != null) {
-            return ResponseEntity.ok(cliente);
+            ClienteSalida clienteSalida = ClienteMapper.INSTANCE.clienteToClienteSalida(cliente);
+            return ResponseEntity.ok(clienteSalida);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
+
+
     @GetMapping("/")
-    public ResponseEntity<List<Cliente>> obtenerTodosLosClientes() {
+    public ResponseEntity<List<ClienteSalida>> obtenerTodosLosClientes() {
         List<Cliente> clientes = clienteUseCase.getAllClientes();
-        return ResponseEntity.ok(clientes);
+        List<ClienteSalida> clientesSalida = clientes.stream()
+                .map(ClienteMapper.INSTANCE::clienteToClienteSalida)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(clientesSalida);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> eliminarCliente(@PathVariable String id) {

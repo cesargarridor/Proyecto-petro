@@ -32,7 +32,7 @@ public class Cliente extends MainTable {
     private String nombre;
 
     @ApiModelProperty(notes = "CIF del cliente", required = true, example = "B12345678")
-    @DynamoDBAttribute(attributeName = "CIF")
+    @DynamoDBAttribute(attributeName = "cif")
     @NotBlank
     private String cif;
 

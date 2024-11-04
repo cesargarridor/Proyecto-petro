@@ -25,7 +25,7 @@ public class ClienteUseCaseImpl implements ClientUseCase {
         cliente.setPk(clienteModel.getClientId());
         cliente.setSk();
         cliente.setgIndexPk(clienteModel.getNombre());
-        cliente.setgIndex2Pk(clienteModel.getCIF());
+        cliente.setgIndex2Pk(clienteModel.getCif());
         cliente.setgIndex3Pk(clienteModel.getTelefono());
 
         cliente.setClientId(clienteModel.getClientId());
@@ -34,7 +34,7 @@ public class ClienteUseCaseImpl implements ClientUseCase {
         cliente.setTelefono(clienteModel.getTelefono());
         cliente.setDireccion(clienteModel.getDireccion());
         cliente.setEstado(clienteModel.isEstado());
-        cliente.setCif(clienteModel.getCIF());
+        cliente.setCif(clienteModel.getCif());
 
         clienteRepository.save(cliente);
 
@@ -65,14 +65,14 @@ public class ClienteUseCaseImpl implements ClientUseCase {
         Cliente cliente = getClienteById(clienteModel.getClientId());
         if (cliente != null) {
             cliente.setgIndexPk(clienteModel.getNombre());
-            cliente.setgIndex2Pk(clienteModel.getCIF());
+            cliente.setgIndex2Pk(clienteModel.getCif());
             cliente.setgIndex3Pk(clienteModel.getTelefono());
 
             cliente.setEmail(clienteModel.getEmail());
             cliente.setTelefono(clienteModel.getTelefono());
             cliente.setDireccion(clienteModel.getDireccion());
             cliente.setEstado(clienteModel.isEstado());
-            cliente.setCif(clienteModel.getCIF());
+            cliente.setCif(clienteModel.getCif());
 
 
             clienteRepository.save(cliente);
