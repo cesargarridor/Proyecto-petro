@@ -35,6 +35,7 @@ public class ClienteController {
     @GetMapping("/{id}")
     public ResponseEntity<ClienteSalida> obtenerCliente(@PathVariable String id) {
         Cliente cliente = clienteUseCase.getClienteById(id);
+        System.out.println(cliente);
         if (cliente != null) {
             ClienteSalida clienteSalida = ClienteMapper.INSTANCE.clienteToClienteSalida(cliente);
             return ResponseEntity.ok(clienteSalida);
