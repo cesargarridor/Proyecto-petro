@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ClienteUseCaseImpl implements ClientUseCase {
@@ -25,14 +26,18 @@ public class ClienteUseCaseImpl implements ClientUseCase {
 
     @Override
     public Cliente createCliente(ClienteModel clienteModel) {
-        Cliente cliente = new Cliente();
+        Optional<Cliente> clienteExistente = Optional.ofNullable(clienteRepository.findById(clienteModel.getClientId()));
 
+        if (clienteExistente.isPresent()) {
+            throw new RuntimeException("El cliente con ID " + clienteModel.getClientId() + " ya existe.");
+        }
+
+        Cliente cliente = new Cliente();
         cliente.setPk(clienteModel.getClientId());
         cliente.setSk();
         cliente.setgIndexPk(clienteModel.getNombre());
         cliente.setgIndex2Pk(clienteModel.getCif());
         cliente.setgIndex3Pk(clienteModel.getTelefono());
-
         cliente.setClientId(clienteModel.getClientId());
         cliente.setNombre(clienteModel.getNombre());
         cliente.setEmail(clienteModel.getEmail());
@@ -45,9 +50,8 @@ public class ClienteUseCaseImpl implements ClientUseCase {
 
         if (clienteModel.getPresupuesto() != null) {
             Presupuesto presupuesto = new Presupuesto(cliente.getClientId());
-            presupuesto.setPk(clienteModel.getClientId());
+            presupuesto.setPk(Presupuesto.PATTERN_PK + cliente.getClientId());
             presupuesto.setSk();
-
             presupuesto.setCantidad(clienteModel.getPresupuesto().getCantidad());
             presupuesto.setEnabled(clienteModel.getPresupuesto().isEnabled());
             presupuesto.setFecha_Creacion(clienteModel.getPresupuesto().getFecha_Creacion());
@@ -55,9 +59,10 @@ public class ClienteUseCaseImpl implements ClientUseCase {
             presupuestoRepository.save(presupuesto);
         }
 
-
         return cliente;
     }
+
+
 
     @Override
     public Cliente getClienteById(String id) {

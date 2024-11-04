@@ -41,4 +41,14 @@ public class ClienteRepositoryImpl implements ClienteRepository {
     public void delete(Cliente cliente) {
         dynamoDBMapper.delete(cliente);
     }
+
+    @Override
+    public List<Cliente> findByEstadoTrue() {
+        return List.of();
+    }
+
+    @Override
+    public List<Cliente> findByEstadoFalse() {
+        return List.of();
+    }
 }

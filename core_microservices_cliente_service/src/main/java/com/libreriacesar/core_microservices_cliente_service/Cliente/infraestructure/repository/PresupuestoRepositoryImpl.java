@@ -35,4 +35,14 @@ public class PresupuestoRepositoryImpl implements PresupuestoRepository {
     public void delete(Presupuesto presupuesto) {
 
     }
+
+    @Override
+    public List<Presupuesto> findByEnabledTrue() {
+        return List.of();
+    }
+
+    @Override
+    public List<Presupuesto> findByEnabledFalse() {
+        return List.of();
+    }
 }

@@ -12,4 +12,7 @@ public interface PresupuestoRepository {
     Presupuesto findById(String id);
     List<Presupuesto> findAll();
     void delete(Presupuesto presupuesto);
+    List<Presupuesto> findByEnabledTrue();
+
+    List<Presupuesto> findByEnabledFalse();
 }

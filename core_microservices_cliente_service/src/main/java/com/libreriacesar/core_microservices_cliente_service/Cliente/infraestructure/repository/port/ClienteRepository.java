@@ -14,4 +14,8 @@ public interface ClienteRepository {
     Cliente findById(String id);
     List<Cliente> findAll();
     void delete(Cliente cliente);
+
+    List<Cliente> findByEstadoTrue();
+
+    List<Cliente> findByEstadoFalse();
 }

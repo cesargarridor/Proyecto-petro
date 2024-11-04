@@ -6,6 +6,7 @@ import com.libreriacesar.core_microservices_cliente_service.Cliente.domain.Mappe
 import com.libreriacesar.core_microservices_cliente_service.Cliente.domain.Presupuesto;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.controller.DTO.ClienteModel;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.controller.DTO.output.ClienteSalida;
+import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.repository.port.ClienteRepository;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.repository.port.PresupuestoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,8 @@ public class ClienteController {
     private ClienteMapper clienteMapper;
     private final ClientUseCase clienteUseCase;
     private PresupuestoRepository presupuestoRepository;
+    private ClienteRepository clienteRepository;
+
 
     @Autowired
     public ClienteController(ClientUseCase clienteService) {
@@ -82,6 +85,34 @@ public class ClienteController {
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
+    }
+
+
+   
+
+    @GetMapping("/activos")
+    public ResponseEntity<List<Cliente>> getClientesActivos() {
+
+        List<Cliente> clientesActivos = clienteRepository.findByEstadoTrue();
+        return ResponseEntity.ok(clientesActivos);
+    }
+
+    @GetMapping("/inactivos")
+    public ResponseEntity<List<Cliente>> getClientesInactivos() {
+        List<Cliente> clientesInactivos = clienteRepository.findByEstadoFalse();
+        return ResponseEntity.ok(clientesInactivos);
+    }
+
+    @GetMapping("/presupuestos/activos")
+    public ResponseEntity<List<Presupuesto>> getPresupuestosActivos() {
+        List<Presupuesto> presupuestosActivos = presupuestoRepository.findByEnabledTrue();
+        return ResponseEntity.ok(presupuestosActivos);
+    }
+
+    @GetMapping("/presupuestos/inactivos")
+    public ResponseEntity<List<Presupuesto>> getPresupuestosInactivos() {
+        List<Presupuesto> presupuestosInactivos = presupuestoRepository.findByEnabledFalse();
+        return ResponseEntity.ok(presupuestosInactivos);
     }
 
 

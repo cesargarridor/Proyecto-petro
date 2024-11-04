@@ -41,17 +41,23 @@ public class Presupuesto extends MainTable {
     @NotBlank
     private Boolean enabled;
 
+
+
     public Presupuesto(String clientId) {
+        super(PATTERN_PK + clientId, PATTERN_SK);
+        this.presupuestoId = UUID.randomUUID().toString();  // Genera un ID único para presupuesto
+        setPk();  // Establece PK usando el patrón
+        setSk();
     }
 
-
     public void setPk() {
-        super.setPk(PATTERN_PK + this.presupuestoId);
+        super.setPk(PATTERN_PK + presupuestoId);  // Usa el presupuestoId para formar la PK
     }
 
     public void setSk() {
         super.setSk(PATTERN_SK);
     }
+
     public Presupuesto() {
         super(PATTERN_PK + UUID.randomUUID().toString(), PATTERN_SK);
         this.id = this.getPk().split("#")[1];
