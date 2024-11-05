@@ -1,6 +1,7 @@
 package gastos.core_microservice_gastos.Cliente.domain;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -11,6 +12,7 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 @ApiModel(description = "Modelo para la entidad Gasto")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Gasto extends MainTable{
     public static String PATTERN_PK="clientId#";
     public static final String PATTERN_SK="clientGasto";
@@ -44,5 +46,9 @@ public class Gasto extends MainTable{
         super.setSk(PATTERN_SK);
     }
 
+    public Gasto(){
+        super(PATTERN_PK,PATTERN_SK);
+        this.entityType = ENTITY_TYPE;
+    }
 
 }

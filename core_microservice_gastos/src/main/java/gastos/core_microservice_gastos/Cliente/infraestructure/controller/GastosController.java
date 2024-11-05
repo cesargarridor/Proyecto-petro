@@ -1,8 +1,8 @@
 package gastos.core_microservice_gastos.Cliente.infraestructure.controller;
 
 
-import gastos.core_microservice_gastos.Cliente.application.feign.ClienteServiceClient;
 import gastos.core_microservice_gastos.Cliente.application.port.GastosUseCase;
+import gastos.core_microservice_gastos.Cliente.domain.Gasto;
 import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.ClienteModel;
 import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.GastoModel;
 import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.PresupuestoModel;
@@ -55,10 +55,17 @@ public class GastosController {
     }
 
     @PostMapping("/crearGasto")
-    public ResponseEntity<String> crearGasto(@RequestBody GastoModel gastoModel) {
+    public ResponseEntity<Gasto> crearGasto(@RequestBody GastoModel gastoModel) {
 
-        return ResponseEntity.ok(gastoModel.toString());
+        Gasto gasto = gastosUseCase.guardarNuevoGasto(gastoModel);
+        return ResponseEntity.ok(gasto);
     }
 
+
+    @GetMapping("/getCantidadDinero")
+    public ResponseEntity<Double> getCantidadDinero(@RequestParam String id) {
+        Double cantidad=gastosUseCase.getCantidadPresupuesto(id);
+        return ResponseEntity.ok(cantidad);
+    }
 
 }

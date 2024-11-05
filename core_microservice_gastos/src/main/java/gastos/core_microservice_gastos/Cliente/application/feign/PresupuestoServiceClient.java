@@ -16,4 +16,7 @@ public interface PresupuestoServiceClient {
     @GetMapping("/buscarPorId")
     PresupuestoModel buscarPorId(@RequestParam(name="id") String id);
 
+    @GetMapping("/getCantidad")
+    Double getCantidad(@RequestParam(name="id") String id);
+
 }

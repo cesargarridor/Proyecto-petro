@@ -6,6 +6,8 @@ import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.Ga
 import gastos.core_microservice_gastos.Cliente.infraestructure.repository.port.GastosRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public class GastosRepositoryImpl implements GastosRepository {
 
@@ -17,7 +19,15 @@ public class GastosRepositoryImpl implements GastosRepository {
     }
 
     @Override
-    public void save(GastoModel gastoModel) {
-        dynamoDBMapper.save(gastoModel);
+    public void save(Gasto gasto) {
+        dynamoDBMapper.save(gasto);
+    }
+    @Override
+    public Optional<Gasto> findByClientIdAndGastoId(String clientId, String gastoId) {
+        Gasto gasto = new Gasto(clientId);
+        gasto.setGastoId(gastoId);
+
+        Gasto existingGasto = dynamoDBMapper.load(gasto);
+        return Optional.ofNullable(existingGasto);
     }
 }

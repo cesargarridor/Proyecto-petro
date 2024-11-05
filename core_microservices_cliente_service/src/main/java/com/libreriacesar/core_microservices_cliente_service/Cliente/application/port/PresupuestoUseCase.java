@@ -7,5 +7,6 @@ public interface PresupuestoUseCase {
     Presupuesto sumarCantidad(String presupuestoId, double cantidad);
     Presupuesto restarCantidad(String presupuestoId, double cantidad);
     Presupuesto getPresupuestoById(String id);
+    double getCantidad(String presupuestoId);
 
 }

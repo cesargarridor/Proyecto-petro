@@ -44,4 +44,11 @@ public class PresupuestoUseCaseImpl implements PresupuestoUseCase {
         return presupuestoRepository.findById(id);
     }
 
+    @Override
+    public double getCantidad(String presupuestoId) {
+        Presupuesto presupuesto= presupuestoRepository.findById(presupuestoId);
+        double cantidad = presupuesto.getCantidad();
+        return cantidad;
+    }
+
 }

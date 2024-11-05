@@ -5,6 +5,7 @@ import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.Cl
 import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.GastoModel;
 import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.PresupuestoModel;
 import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.output.ClientePresupuestoDTO;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -13,7 +14,8 @@ public interface GastosUseCase {
      List<ClientePresupuestoDTO> obtenerTodo();
      PresupuestoModel restar(String id,double cantidad);
      PresupuestoModel sumar(String id,double cantidad);
-    // void guardarNuevoGasto(GastoModel gastoModel);
+     Gasto guardarNuevoGasto(GastoModel gastoModel);
      PresupuestoModel buscarPorId(String id);
+     Double getCantidadPresupuesto(@RequestParam(name="id") String id);
 
 }

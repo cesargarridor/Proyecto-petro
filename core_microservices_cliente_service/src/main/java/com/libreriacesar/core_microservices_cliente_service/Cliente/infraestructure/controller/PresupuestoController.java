@@ -42,4 +42,11 @@ public class PresupuestoController {
         }
     }
 
+    @GetMapping("/getCantidad")
+    public ResponseEntity<Double> obtenerCantidad(@RequestParam String id){
+        double cantidad= presupuestoUseCase.getCantidad(id);
+        return ResponseEntity.ok(cantidad);
+    }
+
+
 }

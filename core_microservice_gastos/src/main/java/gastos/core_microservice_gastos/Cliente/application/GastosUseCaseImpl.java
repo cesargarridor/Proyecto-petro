@@ -3,6 +3,7 @@ package gastos.core_microservice_gastos.Cliente.application;
 import gastos.core_microservice_gastos.Cliente.application.feign.ClienteServiceClient;
 import gastos.core_microservice_gastos.Cliente.application.feign.PresupuestoServiceClient;
 import gastos.core_microservice_gastos.Cliente.application.port.GastosUseCase;
+import gastos.core_microservice_gastos.Cliente.domain.Gasto;
 import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.ClienteModel;
 import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.GastoModel;
 import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.PresupuestoModel;
@@ -11,6 +12,7 @@ import gastos.core_microservice_gastos.Cliente.infraestructure.repository.port.G
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GastosUseCaseImpl implements GastosUseCase {
@@ -52,33 +54,46 @@ public class GastosUseCaseImpl implements GastosUseCase {
         return presupuestoServiceClient.buscarPorId(id);
     }
 
-   /* @Override
-    public void guardarNuevoGasto(GastoModel gastoModel) {
-        // Conversión manual de GastoModel a Gasto
-        Gasto gasto = new Gasto(gastoModel.getClientId());
-        gasto.setGastoId(gastoModel.getGastoId());
-        gasto.setCantidad(gastoModel.getCantidad());
-        gasto.setEstado(gastoModel.isEstado());
+    @Override
+    public Double getCantidadPresupuesto(String id) {
+        return presupuestoServiceClient.getCantidad(id);
+    }
 
-        // Obtener el presupuesto correspondiente
-        Presupuesto presupuesto = presupuestoRepository.findById(gastoModel.getClientId());
-        if (presupuesto == null) {
-            throw new RuntimeException("Presupuesto no encontrado para el clientId: " + gastoModel.getClientId());
+    @Override
+    public Gasto guardarNuevoGasto(GastoModel gastomodel) {
+        Optional<Gasto> gastoExistente = gastosRepository.findByClientIdAndGastoId(gastomodel.getClientId(), gastomodel.getGastoId());
+
+        if (gastoExistente.isPresent()) {
+            throw new RuntimeException("El gastoId ya existe para este cliente.");
         }
 
-        // Verificar que el presupuesto tenga suficiente cantidad antes de restar
-        if (presupuesto.getCantidad() < gasto.getCantidad()) {
-            throw new RuntimeException("Fondos insuficientes en el presupuesto para realizar el gasto");
+        double cantidadPresupuesto = getCantidadPresupuesto(gastomodel.getClientId());
+
+        if (cantidadPresupuesto <= 0 || gastomodel.getCantidad() > cantidadPresupuesto) {
+            throw new RuntimeException("No hay suficiente cantidad en el presupuesto o estás en negativo.");
         }
 
-        // Restar la cantidad de gasto del presupuesto
-        presupuesto.setCantidad(presupuesto.getCantidad() - gasto.getCantidad());
+        Gasto gasto = new Gasto(gastomodel.getClientId());
+        gasto.setPk(gastomodel.getClientId());
+        gasto.setSk("gastoId#" + gastomodel.getGastoId());
+        gasto.setGastoId(gastomodel.getGastoId());
+        gasto.setCantidad(gastomodel.getCantidad());
+        gasto.setEstado(gastomodel.isEstado());
 
-        // Guardar el gasto y actualizar el presupuesto en la base de datos
+        restar(gastomodel.getClientId(), gastomodel.getCantidad());
         gastosRepository.save(gasto);
-        presupuestoRepository.save(presupuesto);
-    }*/
+
+        return gasto;
+    }
+
+
+
+
 
 
 
 }
+
+
+
+
