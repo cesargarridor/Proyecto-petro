@@ -2,12 +2,16 @@ package com.libreriacesar.core_microservices_cliente_service.Cliente.infraestruc
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.domain.Cliente;
+import com.libreriacesar.core_microservices_cliente_service.Cliente.domain.Presupuesto;
+import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.controller.DTO.output.ClientePresupuestoDTO;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.repository.port.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class ClienteRepositoryImpl implements ClienteRepository {
@@ -27,6 +31,30 @@ public class ClienteRepositoryImpl implements ClienteRepository {
         dynamoDBMapper.save(cliente);
     }
 
+
+
+    public List<Cliente> findAllClientesBySk(String skValue) {
+        DynamoDBScanExpression scanExpression = new DynamoDBScanExpression()
+                .withFilterExpression("SK = :skValue")
+                .withExpressionAttributeValues(Map.of(":skValue", new AttributeValue().withS(skValue)));
+
+        return dynamoDBMapper.scan(Cliente.class, scanExpression);
+    }
+
+
+    public ClientePresupuestoDTO findClienteAndPresupuestoByClientId(String clientId) {
+        Cliente cliente = dynamoDBMapper.load(Cliente.class, clientId, Cliente.PATTERN_SK);
+
+        if (cliente == null) {
+            throw new RuntimeException("Cliente no encontrado con ID: " + clientId);
+        }
+
+        Presupuesto presupuesto = dynamoDBMapper.load(Presupuesto.class, clientId, Presupuesto.PATTERN_SK);
+
+        return new ClientePresupuestoDTO(cliente, presupuesto);
+    }
+
+
     @Override
     public Cliente findById(String id) {
         return dynamoDBMapper.load(Cliente.class, id);
@@ -40,5 +68,15 @@ public class ClienteRepositoryImpl implements ClienteRepository {
     @Override
     public void delete(Cliente cliente) {
         dynamoDBMapper.delete(cliente);
+    }
+
+    @Override
+    public List<Cliente> findByEstadoTrue() {
+        return List.of();
+    }
+
+    @Override
+    public List<Cliente> findByEstadoFalse() {
+        return List.of();
     }
 }

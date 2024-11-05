@@ -1,4 +1,4 @@
-package com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.controller.DTO;
+package gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO;
 
 import lombok.*;
 

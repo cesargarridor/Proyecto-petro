@@ -1,5 +1,6 @@
 package com.libreriacesar.core_microservices_cliente_service.Cliente.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @ApiModel(description = "Modelo para la entidad Cliente")
-@DynamoDBTable(tableName = "MainTable")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Cliente extends MainTable {
 
     public static  String PATTERN_PK = "clientId#";
@@ -32,7 +33,7 @@ public class Cliente extends MainTable {
     private String nombre;
 
     @ApiModelProperty(notes = "CIF del cliente", required = true, example = "B12345678")
-    @DynamoDBAttribute(attributeName = "CIF")
+    @DynamoDBAttribute(attributeName = "cif")
     @NotBlank
     private String cif;
 

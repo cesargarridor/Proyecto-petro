@@ -1,4 +1,4 @@
-package com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.controller.DTO;
+package gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.output;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ClienteModel {
+public class ClienteSalida {
     private String clientId;
     private String nombre;
     private String email;
@@ -15,5 +15,4 @@ public class ClienteModel {
     private String direccion;
     private boolean estado;
     private String cif;
-    private PresupuestoModel presupuesto;
 }
