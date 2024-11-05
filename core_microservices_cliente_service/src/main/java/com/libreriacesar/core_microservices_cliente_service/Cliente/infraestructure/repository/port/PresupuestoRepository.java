@@ -10,8 +10,6 @@ import java.util.List;
 public interface PresupuestoRepository {
     void save(Presupuesto presupuesto);
     Presupuesto findById(String id);
-    List<Presupuesto> findAll();
-    void delete(Presupuesto presupuesto);
     List<Presupuesto> findByEnabledTrue();
 
     List<Presupuesto> findByEnabledFalse();
