@@ -4,6 +4,8 @@ package gastos.core_microservice_gastos.Cliente.infraestructure.controller;
 import gastos.core_microservice_gastos.Cliente.application.feign.ClienteServiceClient;
 import gastos.core_microservice_gastos.Cliente.application.port.GastosUseCase;
 import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.ClienteModel;
+import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.GastoModel;
+import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.PresupuestoModel;
 import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.output.ClientePresupuestoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,32 @@ public class GastosController {
     public ResponseEntity<List<ClientePresupuestoDTO>> obtenerTodo() {
         List<ClientePresupuestoDTO> clientes =gastosUseCase.obtenerTodo();
         return ResponseEntity.ok(clientes);
+    }
+
+    @PostMapping("/restar")
+    public ResponseEntity<PresupuestoModel> restar(@RequestParam String id, @RequestParam double cantidad) {
+        PresupuestoModel presupuestoModel= gastosUseCase.restar(id,cantidad);
+        return ResponseEntity.ok(presupuestoModel);
+
+    }
+
+    @PostMapping("/sumar")
+    public ResponseEntity<PresupuestoModel> sumar(@RequestParam String id, @RequestParam double cantidad) {
+        PresupuestoModel presupuestoModel= gastosUseCase.sumar(id,cantidad);
+        return ResponseEntity.ok(presupuestoModel);
+
+    }
+
+    @GetMapping("/buscarPorId")
+    public ResponseEntity<PresupuestoModel> buscarPorId(@RequestParam String id) {
+        PresupuestoModel presupuestoModel= gastosUseCase.buscarPorId(id);
+        return ResponseEntity.ok(presupuestoModel);
+    }
+
+    @PostMapping("/crearGasto")
+    public ResponseEntity<String> crearGasto(@RequestBody GastoModel gastoModel) {
+
+        return ResponseEntity.ok(gastoModel.toString());
     }
 
 

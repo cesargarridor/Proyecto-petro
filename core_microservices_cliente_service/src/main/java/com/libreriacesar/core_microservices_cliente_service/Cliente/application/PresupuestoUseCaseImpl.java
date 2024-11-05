@@ -38,4 +38,10 @@ public class PresupuestoUseCaseImpl implements PresupuestoUseCase {
         presupuestoRepository.save(presupuesto);
         return presupuesto;
     }
+
+    @Override
+    public Presupuesto getPresupuestoById(String id) {
+        return presupuestoRepository.findById(id);
+    }
+
 }

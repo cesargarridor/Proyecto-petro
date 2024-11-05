@@ -42,8 +42,9 @@ public class Presupuesto extends MainTable {
     @DynamoDBAttribute(attributeName = "enabled")
     @NotBlank
     private Boolean enabled;
-
-
+    @ApiModelProperty(notes = "ID del cliente", required = true, example = "12345")
+    @DynamoDBAttribute(attributeName = "clientId")
+    private String clientId;
 
     public Presupuesto(String clientId) {
         super(PATTERN_PK + clientId, PATTERN_SK);
