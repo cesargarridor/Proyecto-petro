@@ -18,4 +18,5 @@ public interface GastosUseCase {
      PresupuestoModel buscarPorId(String id);
      Double getCantidadPresupuesto(@RequestParam(name="id") String id);
      Gasto modificarGasto(GastoModel gastoModel);
+     Gasto modificarEstado(GastoModel gastoModel);
 }

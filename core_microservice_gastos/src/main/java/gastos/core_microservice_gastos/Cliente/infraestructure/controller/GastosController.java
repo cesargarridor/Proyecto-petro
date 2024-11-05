@@ -67,6 +67,12 @@ public class GastosController {
         return ResponseEntity.ok(gastoActualizao);
     }
 
+    @PutMapping("/modificarEstado")
+    public ResponseEntity<Gasto> modificarEstado(@RequestBody GastoModel gastoModel) {
+        Gasto gastoActualizao = gastosUseCase.modificarGasto(gastoModel);
+        return ResponseEntity.ok(gastoActualizao);
+    }
+
 
     @GetMapping("/getCantidadDinero")
     public ResponseEntity<Double> getCantidadDinero(@RequestParam String id) {

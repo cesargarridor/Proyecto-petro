@@ -90,10 +90,32 @@ public class GastosUseCaseImpl implements GastosUseCase {
         return gastoExistente;
     }
 
+    @Override
+    public Gasto modificarEstado(GastoModel gastoModel) {
+        Gasto gastoExistente = gastosRepository.findByGastoId(gastoModel.getClientId(), gastoModel.getGastoId());
+
+        if (gastoExistente == null) {
+            throw new RuntimeException("El gasto con ID " + gastoModel.getGastoId() + "del cliente "+gastoModel.getClientId()+" no existe.");
+        }
+
+        gastoExistente.setEstado(gastoModel.isEstado());
+
+        gastosRepository.save(gastoExistente);
+
+        return gastoExistente;
+    }
+
 
 
     @Override
     public Gasto guardarNuevoGasto(GastoModel gastoModel) {
+        Gasto gastoExistente = gastosRepository.findByGastoId(gastoModel.getClientId(), gastoModel.getGastoId());
+
+        if (gastoExistente != null) {
+            throw new RuntimeException("El gasto con ID " + gastoModel.getGastoId() + " ya existe.");
+        }
+
+
         if (gastoModel.getGastoId() == null || gastoModel.getGastoId().isEmpty()) {
             gastoModel.setGastoId(UUID.randomUUID().toString());
         }
@@ -103,12 +125,12 @@ public class GastosUseCaseImpl implements GastosUseCase {
         gasto.setCantidad(gastoModel.getCantidad());
         gasto.setEstado(gastoModel.isEstado());
 
-        // Restar del presupuesto
         restar(gastoModel.getClientId(), gastoModel.getCantidad());
 
         gastosRepository.save(gasto);
         return gasto;
     }
+
 
 
 
