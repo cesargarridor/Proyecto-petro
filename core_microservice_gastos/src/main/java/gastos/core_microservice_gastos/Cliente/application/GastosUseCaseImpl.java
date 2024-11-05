@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class GastosUseCaseImpl implements GastosUseCase {
@@ -60,31 +61,55 @@ public class GastosUseCaseImpl implements GastosUseCase {
     }
 
     @Override
-    public Gasto guardarNuevoGasto(GastoModel gastomodel) {
-        Optional<Gasto> gastoExistente = gastosRepository.findByClientIdAndGastoId(gastomodel.getClientId(), gastomodel.getGastoId());
+    public Gasto modificarGasto(GastoModel gastoModel) {
+        Gasto gastoExistente = gastosRepository.findByGastoId(gastoModel.getClientId(), gastoModel.getGastoId());
 
-        if (gastoExistente.isPresent()) {
-            throw new RuntimeException("El gastoId ya existe para este cliente.");
+        if (gastoExistente == null) {
+            throw new RuntimeException("El gasto con ID " + gastoModel.getGastoId() + " no existe.");
         }
 
-        double cantidadPresupuesto = getCantidadPresupuesto(gastomodel.getClientId());
+        double cantidadAnterior = gastoExistente.getCantidad();
+        double cantidadNueva = gastoModel.getCantidad();
+        double diferencia = cantidadNueva - cantidadAnterior;
 
-        if (cantidadPresupuesto <= 0 || gastomodel.getCantidad() > cantidadPresupuesto) {
-            throw new RuntimeException("No hay suficiente cantidad en el presupuesto o estás en negativo.");
+
+        if (diferencia > 0) {
+            if (getCantidadPresupuesto(gastoModel.getClientId()) >= diferencia) {
+                presupuestoServiceClient.restar(gastoModel.getClientId(), diferencia);
+            } else {
+                throw new RuntimeException("No hay suficiente presupuesto para esta modificación.");
+            }
+        }
+        else if (diferencia < 0) {
+            presupuestoServiceClient.sumar(gastoModel.getClientId(), Math.abs(diferencia));
         }
 
-        Gasto gasto = new Gasto(gastomodel.getClientId());
-        gasto.setPk(gastomodel.getClientId());
-        gasto.setSk("gastoId#" + gastomodel.getGastoId());
-        gasto.setGastoId(gastomodel.getGastoId());
-        gasto.setCantidad(gastomodel.getCantidad());
-        gasto.setEstado(gastomodel.isEstado());
+        gastoExistente.setCantidad(cantidadNueva);
+        gastosRepository.save(gastoExistente);
 
-        restar(gastomodel.getClientId(), gastomodel.getCantidad());
+        return gastoExistente;
+    }
+
+
+
+    @Override
+    public Gasto guardarNuevoGasto(GastoModel gastoModel) {
+        if (gastoModel.getGastoId() == null || gastoModel.getGastoId().isEmpty()) {
+            gastoModel.setGastoId(UUID.randomUUID().toString());
+        }
+
+        Gasto gasto = new Gasto(gastoModel.getClientId(), gastoModel.getGastoId());
+        gasto.setPk(gastoModel.getClientId());
+        gasto.setCantidad(gastoModel.getCantidad());
+        gasto.setEstado(gastoModel.isEstado());
+
+        // Restar del presupuesto
+        restar(gastoModel.getClientId(), gastoModel.getCantidad());
+
         gastosRepository.save(gasto);
-
         return gasto;
     }
+
 
 
 

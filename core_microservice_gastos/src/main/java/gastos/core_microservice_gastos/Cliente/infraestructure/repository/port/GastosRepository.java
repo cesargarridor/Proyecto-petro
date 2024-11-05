@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public interface GastosRepository {
     void save(Gasto gasto);
-    Optional<Gasto> findByClientIdAndGastoId(String clientId, String gastoId);
 
+
+    Gasto findByGastoId(String clientId, String gastoId);
 }

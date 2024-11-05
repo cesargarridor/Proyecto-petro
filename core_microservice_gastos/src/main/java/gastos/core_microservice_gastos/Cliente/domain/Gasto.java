@@ -22,7 +22,7 @@ public class Gasto extends MainTable{
     @DynamoDBAttribute(attributeName = "clientId")
     @NotBlank
     private String clientId;
-    @ApiModelProperty(notes="El id del gasto",required = true,example = "1")
+    @ApiModelProperty(notes="El id del gasto",required = false,example = "1")
     @DynamoDBAttribute(attributeName = "gastoId")
     @NotBlank
     private String gastoId;
@@ -35,9 +35,9 @@ public class Gasto extends MainTable{
     @NotBlank
     private boolean estado;
 
-    public Gasto(String clientId) {
+    /*public Gasto(String clientId) {
         super(PATTERN_PK+clientId,PATTERN_SK);
-    }
+    }*/
     public void setPk() {
         super.setPk(PATTERN_PK + this.clientId);
     }
@@ -49,6 +49,11 @@ public class Gasto extends MainTable{
     public Gasto(){
         super(PATTERN_PK,PATTERN_SK);
         this.entityType = ENTITY_TYPE;
+    }
+    public Gasto(String clientId, String gastoId) {
+        super(PATTERN_PK + clientId, PATTERN_SK + gastoId);
+        this.clientId = clientId;
+        this.gastoId = gastoId;
     }
 
 }
