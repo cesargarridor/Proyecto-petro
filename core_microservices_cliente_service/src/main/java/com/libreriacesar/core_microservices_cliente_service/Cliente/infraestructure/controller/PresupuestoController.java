@@ -20,18 +20,21 @@ public class PresupuestoController {
     }
 
     @PostMapping("/sumar")
+    @ResponseBody
     public ResponseEntity<Presupuesto> sumarCantidad(@RequestParam String presupuestoId, @RequestParam double cantidad) {
         Presupuesto presupuesto = presupuestoUseCase.sumarCantidad(presupuestoId, cantidad);
         return ResponseEntity.ok(presupuesto);
     }
 
     @PostMapping("/restar")
+    @ResponseBody
     public ResponseEntity<Presupuesto> restarCantidad(@RequestParam String presupuestoId, @RequestParam double cantidad) {
         Presupuesto presupuesto = presupuestoUseCase.restarCantidad(presupuestoId, cantidad);
         return ResponseEntity.ok(presupuesto);
     }
 
     @GetMapping("/buscarPorId")
+    @ResponseBody
     public ResponseEntity<Presupuesto> obtenerPresupuestoPorId(@RequestParam String id) {
         Presupuesto presupuesto = presupuestoUseCase.getPresupuestoById(id);
         System.out.println(presupuesto);
