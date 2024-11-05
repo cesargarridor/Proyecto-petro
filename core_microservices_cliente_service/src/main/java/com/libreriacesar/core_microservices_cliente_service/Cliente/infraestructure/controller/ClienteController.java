@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 public class ClienteController {
 
     private ClienteMapper clienteMapper;
+    @Autowired
     private final ClientUseCase clienteUseCase;
     private PresupuestoRepository presupuestoRepository;
     private ClienteRepository clienteRepository;
@@ -42,8 +43,8 @@ public class ClienteController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Cliente creado");
     }
-    @GetMapping("/{id}")
-    public ResponseEntity<ClienteSalida> obtenerCliente(@PathVariable String id) {
+    @GetMapping("/buscarPorId")
+    public ResponseEntity<ClienteSalida> obtenerCliente(@RequestParam String id) {
         Cliente cliente = clienteUseCase.getClienteById(id);
         System.out.println(cliente);
         if (cliente != null) {
