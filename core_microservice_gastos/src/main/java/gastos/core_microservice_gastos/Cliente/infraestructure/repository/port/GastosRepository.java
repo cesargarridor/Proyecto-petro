@@ -8,6 +8,6 @@ import java.util.Optional;
 public interface GastosRepository {
     void save(Gasto gasto);
 
-
+    double obtenerTotalGastosActivos(String clientId);
     Gasto findByGastoId(String clientId, String gastoId);
 }

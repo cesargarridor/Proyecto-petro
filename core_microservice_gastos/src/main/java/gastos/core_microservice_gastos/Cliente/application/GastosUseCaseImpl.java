@@ -50,8 +50,11 @@ public class GastosUseCaseImpl implements GastosUseCase {
     }
 
     @Override
-    public Double getCantidadPresupuesto(String id) {
-        return presupuestoServiceClient.getCantidad(id);
+    public Double getCantidadPresupuesto(String clientId) {
+        double presupuestoTotal = presupuestoServiceClient.getCantidad(clientId);
+        double totalGastosActivos = gastosRepository.obtenerTotalGastosActivos(clientId);
+
+        return presupuestoTotal - totalGastosActivos;
     }
 
     @Override
@@ -84,20 +87,32 @@ public class GastosUseCaseImpl implements GastosUseCase {
         return gastoExistente;
     }
 
+
     @Override
     public Gasto modificarEstado(GastoModel gastoModel) {
         Gasto gastoExistente = gastosRepository.findByGastoId(gastoModel.getClientId(), gastoModel.getGastoId());
 
         if (gastoExistente == null) {
-            throw new RuntimeException("El gasto con ID " + gastoModel.getGastoId() + "del cliente "+gastoModel.getClientId()+" no existe.");
+            throw new RuntimeException("El gasto con ID " + gastoModel.getGastoId() + " del cliente " + gastoModel.getClientId() + " no existe.");
         }
 
-        gastoExistente.setEstado(gastoModel.isEstado());
+        boolean estadoAnterior = gastoExistente.isEstado();
+        boolean nuevoEstado = gastoModel.isEstado();
 
+        if (estadoAnterior != nuevoEstado) {
+            if (nuevoEstado) {
+                presupuestoServiceClient.restar(gastoModel.getClientId(), gastoExistente.getCantidad());
+            } else {
+                presupuestoServiceClient.sumar(gastoModel.getClientId(), gastoExistente.getCantidad());
+            }
+        }
+
+        gastoExistente.setEstado(nuevoEstado);
         gastosRepository.save(gastoExistente);
 
         return gastoExistente;
     }
+
 
 
 
