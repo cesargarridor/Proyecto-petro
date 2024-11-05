@@ -6,12 +6,9 @@ import gastos.core_microservice_gastos.Cliente.domain.Gasto;
 import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.ClienteModel;
 import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.GastoModel;
 import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.PresupuestoModel;
-import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.output.ClientePresupuestoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/gastos")
@@ -28,11 +25,7 @@ public class GastosController {
         return ResponseEntity.ok(cliente);
     }
 
-    @GetMapping("/listar")
-    public ResponseEntity<List<ClientePresupuestoDTO>> obtenerTodo() {
-        List<ClientePresupuestoDTO> clientes =gastosUseCase.obtenerTodo();
-        return ResponseEntity.ok(clientes);
-    }
+
 
     @PostMapping("/restar")
     public ResponseEntity<PresupuestoModel> restar(@RequestParam String id, @RequestParam double cantidad) {
@@ -69,7 +62,7 @@ public class GastosController {
 
     @PutMapping("/modificarEstado")
     public ResponseEntity<Gasto> modificarEstado(@RequestBody GastoModel gastoModel) {
-        Gasto gastoActualizao = gastosUseCase.modificarGasto(gastoModel);
+        Gasto gastoActualizao = gastosUseCase.modificarEstado(gastoModel);
         return ResponseEntity.ok(gastoActualizao);
     }
 

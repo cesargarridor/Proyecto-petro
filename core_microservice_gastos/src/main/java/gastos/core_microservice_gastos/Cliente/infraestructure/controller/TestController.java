@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.model.ListTablesRequest;
 
+
 @RestController
 public class TestController {
 
@@ -17,7 +18,6 @@ public class TestController {
     @GetMapping("/test")
     public String testDynamoDB() {
         try {
-            // Intenta listar las tablas para verificar la conexión
             amazonDynamoDB.listTables(new ListTablesRequest());
             return "Conexión exitosa a DynamoDB!";
         } catch (Exception e) {

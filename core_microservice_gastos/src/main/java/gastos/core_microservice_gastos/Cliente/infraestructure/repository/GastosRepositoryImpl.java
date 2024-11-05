@@ -38,6 +38,21 @@ public class GastosRepositoryImpl implements GastosRepository {
         List<Gasto> result = dynamoDBMapper.query(Gasto.class, queryExpression);
         return result.isEmpty() ? null : result.get(0);
     }
+    public double obtenerTotalGastosActivos(String clientId) {
+        Map<String, AttributeValue> eav = new HashMap<>();
+        eav.put(":pk", new AttributeValue().withS("clientId#" + clientId));
+        eav.put(":estado", new AttributeValue().withBOOL(true));
+
+        DynamoDBQueryExpression<Gasto> queryExpression = new DynamoDBQueryExpression<Gasto>()
+                .withKeyConditionExpression("PK = :pk")
+                .withFilterExpression("estado = :estado") // Filtra solo los gastos con estado true
+                .withExpressionAttributeValues(eav);
+
+        List<Gasto> gastosActivos = dynamoDBMapper.query(Gasto.class, queryExpression);
+
+        // Suma las cantidades de los gastos activos
+        return gastosActivos.stream().mapToDouble(Gasto::getCantidad).sum();
+    }
 
 
 

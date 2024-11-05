@@ -35,9 +35,6 @@ public class Gasto extends MainTable{
     @NotBlank
     private boolean estado;
 
-    /*public Gasto(String clientId) {
-        super(PATTERN_PK+clientId,PATTERN_SK);
-    }*/
     public void setPk() {
         super.setPk(PATTERN_PK + this.clientId);
     }

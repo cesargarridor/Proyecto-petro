@@ -7,12 +7,9 @@ import gastos.core_microservice_gastos.Cliente.domain.Gasto;
 import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.ClienteModel;
 import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.GastoModel;
 import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.PresupuestoModel;
-import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.output.ClientePresupuestoDTO;
 import gastos.core_microservice_gastos.Cliente.infraestructure.repository.port.GastosRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -34,10 +31,7 @@ public class GastosUseCaseImpl implements GastosUseCase {
         return clienteServiceClient.findById(id);
     }
 
-    @Override
-    public List<ClientePresupuestoDTO> obtenerTodo() {
-        return (List<ClientePresupuestoDTO>) clienteServiceClient.findAll();
-    }
+
 
     @Override
     public PresupuestoModel restar(String id,double cantidad) {
@@ -65,7 +59,7 @@ public class GastosUseCaseImpl implements GastosUseCase {
         Gasto gastoExistente = gastosRepository.findByGastoId(gastoModel.getClientId(), gastoModel.getGastoId());
 
         if (gastoExistente == null) {
-            throw new RuntimeException("El gasto con ID " + gastoModel.getGastoId() + " no existe.");
+            throw new RuntimeException("El gasto con ID " + gastoModel.getGastoId() + "del cliente "+gastoModel.getClientId()+" no existe.");
         }
 
         double cantidadAnterior = gastoExistente.getCantidad();
@@ -112,7 +106,7 @@ public class GastosUseCaseImpl implements GastosUseCase {
         Gasto gastoExistente = gastosRepository.findByGastoId(gastoModel.getClientId(), gastoModel.getGastoId());
 
         if (gastoExistente != null) {
-            throw new RuntimeException("El gasto con ID " + gastoModel.getGastoId() + " ya existe.");
+            throw new RuntimeException("El gasto con ID " + gastoModel.getGastoId() + "del cliente "+gastoModel.getClientId()+" ya existe.");
         }
 
 
