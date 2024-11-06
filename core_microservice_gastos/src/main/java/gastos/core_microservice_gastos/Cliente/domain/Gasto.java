@@ -4,14 +4,17 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
 @ApiModel(description = "Modelo para la entidad Gasto")
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Gasto extends MainTable{
     public static String PATTERN_PK="clientId#";
@@ -35,22 +38,6 @@ public class Gasto extends MainTable{
     @NotBlank
     private boolean estado;
 
-    public void setPk() {
-        super.setPk(PATTERN_PK + this.clientId);
-    }
 
-    public void setSk() {
-        super.setSk(PATTERN_SK);
-    }
-
-    public Gasto(){
-        super(PATTERN_PK,PATTERN_SK);
-        this.entityType = ENTITY_TYPE;
-    }
-    public Gasto(String clientId, String gastoId) {
-        super(PATTERN_PK + clientId, PATTERN_SK + gastoId);
-        this.clientId = clientId;
-        this.gastoId = gastoId;
-    }
 
 }

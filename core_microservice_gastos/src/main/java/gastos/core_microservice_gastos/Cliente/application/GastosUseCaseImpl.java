@@ -4,12 +4,14 @@ import gastos.core_microservice_gastos.Cliente.application.feign.ClienteServiceC
 import gastos.core_microservice_gastos.Cliente.application.feign.PresupuestoServiceClient;
 import gastos.core_microservice_gastos.Cliente.application.port.GastosUseCase;
 import gastos.core_microservice_gastos.Cliente.domain.Gasto;
+import gastos.core_microservice_gastos.Cliente.domain.Mappers.GastosMapper;
 import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.ClienteModel;
 import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.GastoModel;
 import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.PresupuestoModel;
 import gastos.core_microservice_gastos.Cliente.infraestructure.repository.port.GastosRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -18,6 +20,9 @@ import java.util.UUID;
 public class GastosUseCaseImpl implements GastosUseCase {
 
     private static final Logger logger = LoggerFactory.getLogger(GastosUseCaseImpl.class);
+    @Autowired
+    private GastosMapper gastosMapper;
+
 
     private final ClienteServiceClient clienteServiceClient;
     private final PresupuestoServiceClient presupuestoServiceClient;
@@ -177,11 +182,17 @@ public class GastosUseCaseImpl implements GastosUseCase {
      * @return El objeto Gasto creado.
      * @throws RuntimeException si el gasto ya existe.
      */
+   /* @Autowired
+    private GastosMapper gastosMapper;*/
+
+
+
+
     @Override
     public Gasto guardarNuevoGasto(GastoModel gastoModel) {
         logger.info("Guardando un nuevo gasto para el cliente {} con ID: {}", gastoModel.getClientId(), gastoModel.getGastoId());
-        Gasto gastoExistente = gastosRepository.findByGastoId(gastoModel.getClientId(), gastoModel.getGastoId());
 
+        Gasto gastoExistente = gastosRepository.findByGastoId(gastoModel.getClientId(), gastoModel.getGastoId());
         if (gastoExistente != null) {
             logger.error("El gasto con ID {} del cliente {} ya existe.", gastoModel.getGastoId(), gastoModel.getClientId());
             throw new RuntimeException("El gasto con ID " + gastoModel.getGastoId() + " del cliente " + gastoModel.getClientId() + " ya existe.");
@@ -190,16 +201,19 @@ public class GastosUseCaseImpl implements GastosUseCase {
         if (gastoModel.getGastoId() == null || gastoModel.getGastoId().isEmpty()) {
             gastoModel.setGastoId(UUID.randomUUID().toString());
         }
+        System.out.println(gastoModel);
+        Gasto gasto = gastosMapper.modelToEntity(gastoModel);
+        System.out.println(gasto);
 
-        Gasto gasto = new Gasto(gastoModel.getClientId(), gastoModel.getGastoId());
-        gasto.setPk(gastoModel.getClientId());
-        gasto.setCantidad(gastoModel.getCantidad());
-        gasto.setEstado(gastoModel.isEstado());
+
 
         restar(gastoModel.getClientId(), gastoModel.getCantidad());
         gastosRepository.save(gasto);
+
         logger.info("Nuevo gasto guardado para el cliente {} con ID: {}", gastoModel.getClientId(), gastoModel.getGastoId());
 
         return gasto;
     }
+
+
 }
