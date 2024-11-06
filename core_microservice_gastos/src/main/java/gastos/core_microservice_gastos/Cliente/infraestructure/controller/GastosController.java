@@ -38,11 +38,11 @@ public class GastosController {
      * @param cantidad La cantidad a restar.
      * @return El modelo del presupuesto actualizado después de la resta.
      */
-    @PostMapping("/restar")
+   /* @PostMapping("/restar")
     public ResponseEntity<PresupuestoModel> restar(@RequestParam String id, @RequestParam double cantidad) {
         PresupuestoModel presupuestoModel = gastosUseCase.restar(id, cantidad);
         return ResponseEntity.ok(presupuestoModel);
-    }
+    }*/
 
     /**
      * Método para sumar una cantidad al presupuesto de un cliente.

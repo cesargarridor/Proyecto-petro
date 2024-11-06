@@ -1,6 +1,7 @@
 package com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.repository;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.domain.Cliente;
@@ -10,6 +11,7 @@ import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestruct
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -56,9 +58,21 @@ public class ClienteRepositoryImpl implements ClienteRepository {
 
 
     @Override
-    public Cliente findById(String id) {
-        return dynamoDBMapper.load(Cliente.class, id);
+    public Cliente findById(String clientId) {
+        Map<String, AttributeValue> eav = new HashMap<>();
+        eav.put(":pk", new AttributeValue().withS(clientId));
+        eav.put(":sk", new AttributeValue().withS(Cliente.PATTERN_SK)); // Asegurando que SK sea el patrón para Cliente
+
+        DynamoDBQueryExpression<Cliente> queryExpression = new DynamoDBQueryExpression<Cliente>()
+                .withKeyConditionExpression("PK = :pk and SK = :sk")
+                .withExpressionAttributeValues(eav);
+
+        List<Cliente> result = dynamoDBMapper.query(Cliente.class, queryExpression);
+        return result.isEmpty() ? null : result.get(0);
     }
+
+
+
 
     @Override
     public List<Cliente> findAll() {

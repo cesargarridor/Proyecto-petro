@@ -51,14 +51,13 @@ public class GastosUseCaseImpl implements GastosUseCase {
     /**
      * Resta una cantidad del presupuesto asociado al cliente.
      *
-     * @param id      El ID del cliente.
+     * @param id       El ID del cliente.
      * @param cantidad La cantidad a restar del presupuesto.
-     * @return Un objeto PresupuestoModel que representa el presupuesto actualizado.
      */
     @Override
-    public PresupuestoModel restar(String id, double cantidad) {
+    public void restar(String id, double cantidad) {
         logger.info("Restando {} del presupuesto del cliente con ID: {}", cantidad, id);
-        return presupuestoServiceClient.restar(id, cantidad);
+        presupuestoServiceClient.restar(id, cantidad);
     }
 
     /**
@@ -186,8 +185,7 @@ public class GastosUseCaseImpl implements GastosUseCase {
      * @return El objeto Gasto creado.
      * @throws RuntimeException si el gasto ya existe.
      */
-   /* @Autowired
-    private GastosMapper gastosMapper;*/
+
 
 
 
@@ -195,6 +193,8 @@ public class GastosUseCaseImpl implements GastosUseCase {
     @Override
     public Gasto guardarNuevoGasto(GastoModel gastoModel) {
         logger.info("Guardando un nuevo gasto para el cliente {} con ID: {}", gastoModel.getClientId(), gastoModel.getGastoId());
+
+        System.out.println("Hola");
 
         Gasto gastoExistente = gastosRepository.findByGastoId(gastoModel.getClientId(), gastoModel.getGastoId());
         if (gastoExistente != null) {
@@ -210,8 +210,9 @@ public class GastosUseCaseImpl implements GastosUseCase {
         System.out.println(gasto);
 
 
-
         restar(gastoModel.getClientId(), gastoModel.getCantidad());
+        System.out.printf("hola");
+
         gastosRepository.save(gasto);
 
         logger.info("Nuevo gasto guardado para el cliente {} con ID: {}", gastoModel.getClientId(), gastoModel.getGastoId());

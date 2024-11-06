@@ -11,6 +11,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PresupuestoModel {
+    private String clientId;
     private String presupuestoId;
     private double cantidad;
     private boolean enabled;

@@ -2,6 +2,8 @@ package com.libreriacesar.core_microservices_cliente_service.Cliente.application
 
 import com.libreriacesar.core_microservices_cliente_service.Cliente.application.port.ClientUseCase;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.domain.Cliente;
+import com.libreriacesar.core_microservices_cliente_service.Cliente.domain.Mappers.ClienteMapper;
+import com.libreriacesar.core_microservices_cliente_service.Cliente.domain.Mappers.PresupuestoMapper;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.domain.Presupuesto;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.controller.DTO.ClienteModel;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.controller.DTO.output.ClientePresupuestoDTO;
@@ -41,37 +43,30 @@ public class ClienteUseCaseImpl implements ClientUseCase {
     public Cliente createCliente(ClienteModel clienteModel) {
         logger.info("Intentando crear un nuevo cliente con ID: {}", clienteModel.getClientId());
 
+        // Verifica si el cliente ya existe
         if (clienteRepository.findById(clienteModel.getClientId()) != null) {
             logger.error("El cliente con ID {} ya existe", clienteModel.getClientId());
             throw new RuntimeException("El cliente con ID " + clienteModel.getClientId() + " ya existe.");
         }
 
-        Cliente cliente = new Cliente();
-        cliente.setPk(clienteModel.getClientId());
-        cliente.setSk();
+        // Mapea ClienteModel a Cliente usando ClienteMapper
+        Cliente cliente = ClienteMapper.INSTANCE.modelToEntity(clienteModel);
         cliente.setgIndexPk(clienteModel.getNombre());
         cliente.setgIndex2Pk(clienteModel.getCif());
         cliente.setgIndex3Pk(clienteModel.getTelefono());
-        cliente.setClientId(clienteModel.getClientId());
-        cliente.setNombre(clienteModel.getNombre());
-        cliente.setEmail(clienteModel.getEmail());
-        cliente.setTelefono(clienteModel.getTelefono());
-        cliente.setDireccion(clienteModel.getDireccion());
-        cliente.setEstado(clienteModel.isEstado());
-        cliente.setCif(clienteModel.getCif());
+        cliente.setId(clienteModel.getClientId());
 
+        // Guarda el cliente en el repositorio
         clienteRepository.save(cliente);
         logger.info("Cliente con ID {} creado exitosamente", clienteModel.getClientId());
 
+        // Crea el presupuesto si está presente en ClienteModel
         if (clienteModel.getPresupuesto() != null) {
-            Presupuesto presupuesto = new Presupuesto(cliente.getClientId());
-            presupuesto.setPresupuestoId(cliente.getClientId());
-            presupuesto.setPk(cliente.getClientId());
-            presupuesto.setSk();
-            presupuesto.setCantidad(clienteModel.getPresupuesto().getCantidad());
-            presupuesto.setEnabled(clienteModel.getPresupuesto().isEnabled());
-            presupuesto.setFecha_Creacion(clienteModel.getPresupuesto().getFecha_Creacion());
+            Presupuesto presupuesto = PresupuestoMapper.INSTANCE.modelToEntity(clienteModel.getPresupuesto());
+            presupuesto.setPk(cliente.getPk());
+            presupuesto.setSk(Presupuesto.PATTERN_SK);
 
+            // Guarda el presupuesto en el repositorio
             presupuestoRepository.save(presupuesto);
             logger.info("Presupuesto para el cliente con ID {} creado exitosamente", clienteModel.getClientId());
         }

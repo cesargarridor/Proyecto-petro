@@ -16,6 +16,7 @@ public interface GastosMapper {
 
     @Mapping(target = "pk", source="clientId")
     @Mapping(target = "sk", constant="clientGasto")
+    @Mapping(target = "gIndexPk", source = "gastoId")
     Gasto modelToEntity(GastoModel gastoModel);
 
 
