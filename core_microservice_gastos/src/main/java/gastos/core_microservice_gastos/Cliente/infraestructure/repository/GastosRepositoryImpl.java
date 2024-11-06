@@ -29,7 +29,7 @@ public class GastosRepositoryImpl implements GastosRepository {
     public Gasto findByGastoId(String clientId, String gastoId) {
         Map<String, AttributeValue> eav = new HashMap<>();
         eav.put(":pk", new AttributeValue().withS(clientId));
-        eav.put(":sk", new AttributeValue().withS(Gasto.PATTERN_SK + gastoId));
+        eav.put(":sk", new AttributeValue().withS(Gasto.PATTERN_SK));
 
         DynamoDBQueryExpression<Gasto> queryExpression = new DynamoDBQueryExpression<Gasto>()
                 .withKeyConditionExpression("PK = :pk and SK = :sk")
