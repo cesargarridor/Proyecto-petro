@@ -51,14 +51,13 @@ public class GastosUseCaseImpl implements GastosUseCase {
     /**
      * Resta una cantidad del presupuesto asociado al cliente.
      *
-     * @param id      El ID del cliente.
+     * @param id       El ID del cliente.
      * @param cantidad La cantidad a restar del presupuesto.
-     * @return Un objeto PresupuestoModel que representa el presupuesto actualizado.
      */
     @Override
-    public PresupuestoModel restar(String id, double cantidad) {
+    public void restar(String id, double cantidad) {
         logger.info("Restando {} del presupuesto del cliente con ID: {}", cantidad, id);
-        return presupuestoServiceClient.restar(id, cantidad);
+        presupuestoServiceClient.restar(id, cantidad);
     }
 
     /**
@@ -111,13 +110,14 @@ public class GastosUseCaseImpl implements GastosUseCase {
     @Override
     public Gasto modificarGasto(GastoModel gastoModel) {
         logger.info("Modificando el gasto con ID: {} del cliente {}", gastoModel.getGastoId(), gastoModel.getClientId());
-        Gasto gastoExistente = gastosRepository.findByGastoId(gastoModel.getClientId(), gastoModel.getGastoId());
 
+        Gasto gastoExistente = gastosRepository.findByGastoId(gastoModel.getClientId(), gastoModel.getGastoId());
         if (gastoExistente == null) {
             logger.error("El gasto con ID {} del cliente {} no existe.", gastoModel.getGastoId(), gastoModel.getClientId());
             throw new RuntimeException("El gasto con ID " + gastoModel.getGastoId() + " del cliente " + gastoModel.getClientId() + " no existe.");
         }
 
+        // Calcular la diferencia en la cantidad y ajustar el presupuesto
         double cantidadAnterior = gastoExistente.getCantidad();
         double cantidadNueva = gastoModel.getCantidad();
         double diferencia = cantidadNueva - cantidadAnterior;
@@ -133,12 +133,15 @@ public class GastosUseCaseImpl implements GastosUseCase {
             presupuestoServiceClient.sumar(gastoModel.getClientId(), Math.abs(diferencia));
         }
 
+        // Actualizar los datos del gasto existente con los valores de gastoModel usando el mapper
         gastoExistente.setCantidad(cantidadNueva);
+        gastoExistente.setEstado(gastoModel.isEstado());
         gastosRepository.save(gastoExistente);
-        logger.info("Gasto con ID {} modificado exitosamente.", gastoModel.getGastoId());
 
+        logger.info("Gasto con ID {} modificado exitosamente.", gastoModel.getGastoId());
         return gastoExistente;
     }
+
 
     /**
      * Modifica el estado de un gasto existente.
@@ -182,15 +185,12 @@ public class GastosUseCaseImpl implements GastosUseCase {
      * @return El objeto Gasto creado.
      * @throws RuntimeException si el gasto ya existe.
      */
-   /* @Autowired
-    private GastosMapper gastosMapper;*/
-
-
 
 
     @Override
     public Gasto guardarNuevoGasto(GastoModel gastoModel) {
         logger.info("Guardando un nuevo gasto para el cliente {} con ID: {}", gastoModel.getClientId(), gastoModel.getGastoId());
+
 
         Gasto gastoExistente = gastosRepository.findByGastoId(gastoModel.getClientId(), gastoModel.getGastoId());
         if (gastoExistente != null) {
@@ -201,13 +201,11 @@ public class GastosUseCaseImpl implements GastosUseCase {
         if (gastoModel.getGastoId() == null || gastoModel.getGastoId().isEmpty()) {
             gastoModel.setGastoId(UUID.randomUUID().toString());
         }
-        System.out.println(gastoModel);
         Gasto gasto = gastosMapper.modelToEntity(gastoModel);
-        System.out.println(gasto);
-
 
 
         restar(gastoModel.getClientId(), gastoModel.getCantidad());
+
         gastosRepository.save(gasto);
 
         logger.info("Nuevo gasto guardado para el cliente {} con ID: {}", gastoModel.getClientId(), gastoModel.getGastoId());

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 public interface GastosUseCase {
      ClienteModel obtenerClientePorId(String id);
-     PresupuestoModel restar(String id,double cantidad);
+     void restar(String id, double cantidad);
      PresupuestoModel sumar(String id,double cantidad);
      Gasto guardarNuevoGasto(GastoModel gastoModel);
      PresupuestoModel buscarPorId(String id);

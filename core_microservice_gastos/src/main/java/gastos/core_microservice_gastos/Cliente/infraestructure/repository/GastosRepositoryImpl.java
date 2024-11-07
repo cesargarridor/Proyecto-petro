@@ -25,19 +25,33 @@ public class GastosRepositoryImpl implements GastosRepository {
     public void save(Gasto gasto) {
         dynamoDBMapper.save(gasto);
     }
+
+
     @Override
     public Gasto findByGastoId(String clientId, String gastoId) {
         Map<String, AttributeValue> eav = new HashMap<>();
         eav.put(":pk", new AttributeValue().withS(clientId));
-        eav.put(":sk", new AttributeValue().withS(Gasto.PATTERN_SK + gastoId));
 
         DynamoDBQueryExpression<Gasto> queryExpression = new DynamoDBQueryExpression<Gasto>()
-                .withKeyConditionExpression("PK = :pk and SK = :sk")
+                .withKeyConditionExpression("PK = :pk")
                 .withExpressionAttributeValues(eav);
 
         List<Gasto> result = dynamoDBMapper.query(Gasto.class, queryExpression);
-        return result.isEmpty() ? null : result.get(0);
+        for (Gasto gasto : result) {
+            if (gastoId.equals(gasto.getGastoId())) {
+                return gasto;
+            }
+        }
+
+        return null;
     }
+
+
+
+
+
+
+
     public double obtenerTotalGastosActivos(String clientId) {
         Map<String, AttributeValue> eav = new HashMap<>();
         eav.put(":pk", new AttributeValue().withS("clientId#" + clientId));
