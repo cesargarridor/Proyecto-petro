@@ -6,6 +6,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortKey;
 
 import javax.validation.constraints.NotBlank;
@@ -16,6 +17,9 @@ import java.util.UUID;
 @Setter
 @Getter
 @ToString
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Presupuesto extends MainTable {
 
@@ -44,55 +48,5 @@ public class Presupuesto extends MainTable {
     private Boolean enabled;
 
 
-    public Presupuesto(String clientId) {
-        super(PATTERN_PK + clientId, PATTERN_SK);
 
-    }
-
-    public void setPk() {
-        super.setPk(PATTERN_PK + this.clientId);
-    }
-
-    public void setSk() {
-        super.setSk(PATTERN_SK);
-    }
-
-    public Presupuesto() {
-        super(PATTERN_PK + UUID.randomUUID().toString(), PATTERN_SK);
-        this.id = this.getPk().split("#")[1];
-        this.entityType = ENTITY_TYPE;
-        this.created = new Date();
-
-    }
-
-    public Presupuesto(String presupuestoId, double cantidad, Date fecha_Creacion, Boolean enabled) {
-        this.presupuestoId = presupuestoId;
-        this.cantidad = cantidad;
-        this.fecha_Creacion = fecha_Creacion;
-        this.enabled = enabled;
-    }
-
-    public Presupuesto(MainTableBuilder<?, ?> b, String presupuestoId, double cantidad, Date fecha_Creacion, Boolean enabled) {
-        super(b);
-        this.presupuestoId = presupuestoId;
-        this.cantidad = cantidad;
-        this.fecha_Creacion = fecha_Creacion;
-        this.enabled = enabled;
-    }
-
-    public Presupuesto(String pk, String sk, String presupuestoId, double cantidad, Date fecha_Creacion, Boolean enabled) {
-        super(pk, sk);
-        this.presupuestoId = presupuestoId;
-        this.cantidad = cantidad;
-        this.fecha_Creacion = fecha_Creacion;
-        this.enabled = enabled;
-    }
-
-    public Presupuesto(String pk, String sk, String gIndexPk, String gIndex1Pk, String gIndex1Sk, String gIndex2Pk, String gIndex3Pk, String gIndex3Sk, String gIndex4Pk, String gIndex5Pk, String gIndex6Pk, String gIndex7Pk, String gIndex7Sk, String lIndexSk, String lIndex1Sk, Date created, Date modify, String entityType, String id, String status, String clientId, String presupuestoId, double cantidad, Date fecha_Creacion, Boolean enabled) {
-        super(pk, sk, gIndexPk, gIndex1Pk, gIndex1Sk, gIndex2Pk, gIndex3Pk, gIndex3Sk, gIndex4Pk, gIndex5Pk, gIndex6Pk, gIndex7Pk, gIndex7Sk, lIndexSk, lIndex1Sk, created, modify, entityType, id, status, clientId);
-        this.presupuestoId = presupuestoId;
-        this.cantidad = cantidad;
-        this.fecha_Creacion = fecha_Creacion;
-        this.enabled = enabled;
-    }
 }

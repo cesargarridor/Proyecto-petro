@@ -13,5 +13,9 @@ public interface ClienteMapper {
 
     ClienteSalida clienteToClienteSalida(Cliente cliente);
 
+    @Mapping(target = "pk", expression = "java(clienteModel.getClientId())")
+    @Mapping(target = "sk", constant = Cliente.PATTERN_SK)
+    @Mapping(target="clientId",expression = "java(Cliente.PATTERN_PK + clienteModel.getClientId())")
+    Cliente modelToEntity(ClienteModel clienteModel);
 
 }
