@@ -16,7 +16,7 @@ public class GastosRepositoryImpl implements GastosRepository {
 
     private final DynamoDBMapper dynamoDBMapper;
 
-
+//:)
     public GastosRepositoryImpl(DynamoDBMapper dynamoDBMapper) {
         this.dynamoDBMapper = dynamoDBMapper;
     }
