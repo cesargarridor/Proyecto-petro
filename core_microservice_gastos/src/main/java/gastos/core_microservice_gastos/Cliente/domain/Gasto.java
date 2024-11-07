@@ -2,12 +2,14 @@ package gastos.core_microservice_gastos.Cliente.domain;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import gastos.core_microservice_gastos.shared.errorHandling.validators.FechaGastoCheck.FechaGastoCheckConstraint;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotBlank;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -37,6 +39,11 @@ public class Gasto extends MainTable{
     @DynamoDBAttribute(attributeName = "estado")
     @NotBlank
     private boolean estado;
+
+    /*@ApiModelProperty
+    @DynamoDBAttribute(attributeName = "fechaCreacion")
+    @FechaGastoCheckConstraint
+    private Date fechaCreacion;*/
 
  //etiqueta que valide formato fecha y si no lanzar excepcion personalizada
 

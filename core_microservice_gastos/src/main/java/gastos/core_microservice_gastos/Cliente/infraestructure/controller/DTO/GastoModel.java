@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -20,4 +21,5 @@ public class GastoModel {
     private double cantidad;
 
     private boolean estado;
+   // private Date fechaCreacion;
 }

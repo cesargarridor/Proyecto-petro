@@ -5,6 +5,7 @@ import gastos.core_microservice_gastos.Cliente.domain.Gasto;
 import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.ClienteModel;
 import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.GastoModel;
 import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.PresupuestoModel;
+import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.input.GastoInput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -72,12 +73,12 @@ public class GastosController {
     /**
      * Método para crear un nuevo gasto.
      *
-     * @param gastoModel El modelo del gasto a crear.
+     * @param gastoInput El modelo del gasto a crear.
      * @return El gasto creado.
      */
     @PostMapping("/crearGasto")
-    public ResponseEntity<Gasto> crearGasto(@RequestBody GastoModel gastoModel) {
-        Gasto gasto = gastosUseCase.guardarNuevoGasto(gastoModel);
+    public ResponseEntity<Gasto> crearGasto(@RequestBody GastoInput gastoInput) {
+        Gasto gasto = gastosUseCase.guardarNuevoGasto(gastoInput);
         return ResponseEntity.ok(gasto);
     }
 

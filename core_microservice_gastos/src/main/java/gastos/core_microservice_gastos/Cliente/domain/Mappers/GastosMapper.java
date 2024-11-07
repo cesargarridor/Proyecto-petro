@@ -3,6 +3,7 @@ package gastos.core_microservice_gastos.Cliente.domain.Mappers;
 
 import gastos.core_microservice_gastos.Cliente.domain.Gasto;
 import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.GastoModel;
+import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.input.GastoInput;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -20,6 +21,8 @@ public interface GastosMapper {
     @Mapping(target="estado",constant="true")
     Gasto modelToEntity(GastoModel gastoModel);
 
+    @Mapping(target="estado",constant="true")
+    GastoModel InputToModel(GastoInput gasto);
 
 
     /*@AfterMapping

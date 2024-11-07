@@ -1,4 +1,4 @@
-package gastos.core_microservice_gastos.shared.errorHandling;
+package gastos.core_microservice_gastos.shared.errorHandling.exceptions;
 
 import lombok.Data;
 import org.springframework.http.HttpStatus;
