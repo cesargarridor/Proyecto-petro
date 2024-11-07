@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-11-07T09:29:29+0100",
+    date = "2024-11-07T10:18:41+0100",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.5 (Amazon.com Inc.)"
 )
 @Component
@@ -19,11 +19,17 @@ public class PresupuestoMapperImpl implements PresupuestoMapper {
             return null;
         }
 
-        Presupuesto presupuesto = new Presupuesto();
+        Presupuesto.PresupuestoBuilder<?, ?> presupuesto = Presupuesto.builder();
 
-        presupuesto.setPk( presupuestoModel.getClientId() );
-        presupuesto.setSk( "presupuestoId" );
+        presupuesto.cantidad( presupuestoModel.getCantidad() );
+        presupuesto.clientId( presupuestoModel.getClientId() );
+        presupuesto.presupuestoId( presupuestoModel.getPresupuestoId() );
+        presupuesto.fecha_Creacion( presupuestoModel.getFecha_Creacion() );
+        presupuesto.enabled( presupuestoModel.isEnabled() );
 
-        return presupuesto;
+        presupuesto.pk( presupuestoModel.getClientId() );
+        presupuesto.sk( "presupuestoId" );
+
+        return presupuesto.build();
     }
 }

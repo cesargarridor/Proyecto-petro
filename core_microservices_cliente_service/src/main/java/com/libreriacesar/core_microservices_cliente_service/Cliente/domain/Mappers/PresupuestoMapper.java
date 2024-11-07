@@ -12,8 +12,9 @@ import org.mapstruct.factory.Mappers;
 public interface PresupuestoMapper {
     PresupuestoMapper INSTANCE= Mappers.getMapper(PresupuestoMapper.class);
 
-    @Mapping(target = "pk", expression = "java(presupuestoModel.getClientId())")
+    //@Mapping(target = "pk", expression = "java(presupuestoModel.getClientId())")
     @Mapping(target = "sk",constant = Presupuesto.PATTERN_SK)
+    @Mapping(target="cantidad",source="cantidad")
     Presupuesto modelToEntity(PresupuestoModel presupuestoModel);
 
 
