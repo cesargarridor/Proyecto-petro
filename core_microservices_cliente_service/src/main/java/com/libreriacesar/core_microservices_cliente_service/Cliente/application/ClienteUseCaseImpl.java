@@ -43,30 +43,22 @@ public class ClienteUseCaseImpl implements ClientUseCase {
     public Cliente createCliente(ClienteModel clienteModel) {
         logger.info("Intentando crear un nuevo cliente con ID: {}", clienteModel.getClientId());
 
-        // Verifica si el cliente ya existe
         if (clienteRepository.findById(clienteModel.getClientId()) != null) {
             logger.error("El cliente con ID {} ya existe", clienteModel.getClientId());
             throw new RuntimeException("El cliente con ID " + clienteModel.getClientId() + " ya existe.");
         }
 
-        // Mapea ClienteModel a Cliente usando ClienteMapper
         Cliente cliente = ClienteMapper.INSTANCE.modelToEntity(clienteModel);
-        cliente.setgIndexPk(clienteModel.getNombre());
-        cliente.setgIndex2Pk(clienteModel.getCif());
-        cliente.setgIndex3Pk(clienteModel.getTelefono());
-        cliente.setId(clienteModel.getClientId());
 
-        // Guarda el cliente en el repositorio
+
         clienteRepository.save(cliente);
         logger.info("Cliente con ID {} creado exitosamente", clienteModel.getClientId());
 
-        // Crea el presupuesto si está presente en ClienteModel
         if (clienteModel.getPresupuesto() != null) {
             Presupuesto presupuesto = PresupuestoMapper.INSTANCE.modelToEntity(clienteModel.getPresupuesto());
             presupuesto.setPk(cliente.getPk());
             presupuesto.setSk(Presupuesto.PATTERN_SK);
 
-            // Guarda el presupuesto en el repositorio
             presupuestoRepository.save(presupuesto);
             logger.info("Presupuesto para el cliente con ID {} creado exitosamente", clienteModel.getClientId());
         }
@@ -133,24 +125,21 @@ public class ClienteUseCaseImpl implements ClientUseCase {
     @Override
     public void updateCliente(ClienteModel clienteModel) {
         logger.info("Actualizando el cliente con ID: {}", clienteModel.getClientId());
-        Cliente cliente = getClienteById(clienteModel.getClientId());
-        if (cliente != null) {
-            cliente.setgIndexPk(clienteModel.getNombre());
-            cliente.setgIndex2Pk(clienteModel.getCif());
-            cliente.setgIndex3Pk(clienteModel.getTelefono());
-            cliente.setEmail(clienteModel.getEmail());
-            cliente.setTelefono(clienteModel.getTelefono());
-            cliente.setDireccion(clienteModel.getDireccion());
-            cliente.setEstado(clienteModel.isEstado());
-            cliente.setCif(clienteModel.getCif());
 
-            clienteRepository.save(cliente);
-            logger.info("Cliente con ID {} actualizado exitosamente", clienteModel.getClientId());
-        } else {
+        Cliente clienteExistente = clienteRepository.findById(clienteModel.getClientId());
+
+        if (clienteExistente == null) {
             logger.error("Cliente con ID {} no encontrado", clienteModel.getClientId());
             throw new RuntimeException("Cliente no encontrado con ID: " + clienteModel.getClientId());
         }
+
+        Cliente clienteActualizado = ClienteMapper.INSTANCE.modelToEntity(clienteModel);
+
+
+        clienteRepository.save(clienteActualizado);
+        logger.info("Cliente con ID {} actualizado exitosamente", clienteModel.getClientId());
     }
+
 
 
 

@@ -7,7 +7,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-11-07T09:21:24+0100",
+    date = "2024-11-07T10:05:42+0100",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.5 (Amazon.com Inc.)"
 )
 public class ClienteMapperImpl implements ClienteMapper {
@@ -20,6 +20,14 @@ public class ClienteMapperImpl implements ClienteMapper {
 
         ClienteSalida clienteSalida = new ClienteSalida();
 
+        clienteSalida.setClientId( cliente.getClientId() );
+        clienteSalida.setNombre( cliente.getNombre() );
+        clienteSalida.setEmail( cliente.getEmail() );
+        clienteSalida.setTelefono( cliente.getTelefono() );
+        clienteSalida.setDireccion( cliente.getDireccion() );
+        clienteSalida.setEstado( cliente.isEstado() );
+        clienteSalida.setCif( cliente.getCif() );
+
         return clienteSalida;
     }
 
@@ -29,12 +37,23 @@ public class ClienteMapperImpl implements ClienteMapper {
             return null;
         }
 
-        Cliente cliente = new Cliente();
+        Cliente.ClienteBuilder<?, ?> cliente = Cliente.builder();
 
-        cliente.setPk( clienteModel.getClientId() );
-        cliente.setSk( "clientData" );
-        cliente.setClientId( Cliente.PATTERN_PK + clienteModel.getClientId() );
+        cliente.id( clienteModel.getClientId() );
+        cliente.gIndexPk( clienteModel.getNombre() );
+        cliente.gIndex2Pk( clienteModel.getCif() );
+        cliente.gIndex3Pk( clienteModel.getTelefono() );
+        cliente.nombre( clienteModel.getNombre() );
+        cliente.cif( clienteModel.getCif() );
+        cliente.telefono( clienteModel.getTelefono() );
+        cliente.email( clienteModel.getEmail() );
+        cliente.direccion( clienteModel.getDireccion() );
+        cliente.estado( clienteModel.isEstado() );
 
-        return cliente;
+        cliente.pk( clienteModel.getClientId() );
+        cliente.sk( "clientData" );
+        cliente.clientId( Cliente.PATTERN_PK + clienteModel.getClientId() );
+
+        return cliente.build();
     }
 }
