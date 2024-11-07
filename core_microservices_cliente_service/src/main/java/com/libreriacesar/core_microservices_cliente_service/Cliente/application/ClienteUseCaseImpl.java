@@ -125,24 +125,21 @@ public class ClienteUseCaseImpl implements ClientUseCase {
     @Override
     public void updateCliente(ClienteModel clienteModel) {
         logger.info("Actualizando el cliente con ID: {}", clienteModel.getClientId());
-        Cliente cliente = getClienteById(clienteModel.getClientId());
-        if (cliente != null) {
-            cliente.setgIndexPk(clienteModel.getNombre());
-            cliente.setgIndex2Pk(clienteModel.getCif());
-            cliente.setgIndex3Pk(clienteModel.getTelefono());
-            cliente.setEmail(clienteModel.getEmail());
-            cliente.setTelefono(clienteModel.getTelefono());
-            cliente.setDireccion(clienteModel.getDireccion());
-            cliente.setEstado(clienteModel.isEstado());
-            cliente.setCif(clienteModel.getCif());
 
-            clienteRepository.save(cliente);
-            logger.info("Cliente con ID {} actualizado exitosamente", clienteModel.getClientId());
-        } else {
+        Cliente clienteExistente = clienteRepository.findById(clienteModel.getClientId());
+
+        if (clienteExistente == null) {
             logger.error("Cliente con ID {} no encontrado", clienteModel.getClientId());
             throw new RuntimeException("Cliente no encontrado con ID: " + clienteModel.getClientId());
         }
+
+        Cliente clienteActualizado = ClienteMapper.INSTANCE.modelToEntity(clienteModel);
+
+
+        clienteRepository.save(clienteActualizado);
+        logger.info("Cliente con ID {} actualizado exitosamente", clienteModel.getClientId());
     }
+
 
 
 
