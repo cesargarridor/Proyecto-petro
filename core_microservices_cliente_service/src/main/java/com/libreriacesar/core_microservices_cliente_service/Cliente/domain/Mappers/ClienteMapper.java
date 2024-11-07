@@ -16,10 +16,10 @@ public interface ClienteMapper {
     @Mapping(target = "pk", expression = "java(clienteModel.getClientId())")
     @Mapping(target = "sk", constant = Cliente.PATTERN_SK)
     @Mapping(target="clientId",expression = "java(Cliente.PATTERN_PK + clienteModel.getClientId())")
-    @Mapping(target = "id", source = "clientId")
-    @Mapping(target = "gIndexPk", source = "nombre")
-    @Mapping(target = "gIndex2Pk", source = "cif")
-    @Mapping(target = "gIndex3Pk", source = "telefono")
+    @Mapping(target = "id", expression = "java(clienteModel.getClientId())")
+    @Mapping(target = "gIndexPk", expression = "java(clienteModel.getNombre())")
+    @Mapping(target = "gIndex2Pk", expression = "java(clienteModel.getCif())")
+    @Mapping(target = "gIndex3Pk", expression = "java(clienteModel.getTelefono())")
     Cliente modelToEntity(ClienteModel clienteModel);
 
 }

@@ -56,8 +56,8 @@ public class ClienteUseCaseImpl implements ClientUseCase {
 
         if (clienteModel.getPresupuesto() != null) {
             Presupuesto presupuesto = PresupuestoMapper.INSTANCE.modelToEntity(clienteModel.getPresupuesto());
-            System.out.println("a");
             presupuesto.setPk(cliente.getPk());
+            presupuesto.setCantidad(clienteModel.getPresupuesto().getCantidad());
 
             presupuestoRepository.save(presupuesto);
             logger.info("Presupuesto para el cliente con ID {} creado exitosamente", clienteModel.getClientId());

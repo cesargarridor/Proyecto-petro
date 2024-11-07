@@ -13,7 +13,7 @@ public interface PresupuestoMapper {
     PresupuestoMapper INSTANCE= Mappers.getMapper(PresupuestoMapper.class);
 
     @Mapping(target = "sk",constant = Presupuesto.PATTERN_SK)
-    @Mapping(target="cantidad",source="cantidad")
+   // @Mapping(target="cantidad",source="cantidad")
     Presupuesto modelToEntity(PresupuestoModel presupuestoModel);
 
 
