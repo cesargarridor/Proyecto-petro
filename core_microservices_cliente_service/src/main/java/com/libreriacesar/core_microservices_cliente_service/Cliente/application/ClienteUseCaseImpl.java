@@ -9,6 +9,7 @@ import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestruct
 import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.controller.DTO.output.ClientePresupuestoDTO;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.repository.port.ClienteRepository;
 import com.libreriacesar.core_microservices_cliente_service.Cliente.infraestructure.repository.port.PresupuestoRepository;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ClienteUseCaseImpl implements ClientUseCase {
 
     private static final Logger logger = LoggerFactory.getLogger(ClienteUseCaseImpl.class);
@@ -25,10 +27,7 @@ public class ClienteUseCaseImpl implements ClientUseCase {
     private final ClienteRepository clienteRepository;
     private final PresupuestoRepository presupuestoRepository;
 
-    public ClienteUseCaseImpl(ClienteRepository clienteRepository, PresupuestoRepository presupuestoRepository) {
-        this.clienteRepository = clienteRepository;
-        this.presupuestoRepository = presupuestoRepository;
-    }
+
 
 
 

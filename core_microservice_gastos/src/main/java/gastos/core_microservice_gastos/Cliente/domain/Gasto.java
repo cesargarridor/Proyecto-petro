@@ -38,6 +38,6 @@ public class Gasto extends MainTable{
     @NotBlank
     private boolean estado;
 
-
+ //etiqueta que valide formato fecha y si no lanzar excepcion personalizada
 
 }

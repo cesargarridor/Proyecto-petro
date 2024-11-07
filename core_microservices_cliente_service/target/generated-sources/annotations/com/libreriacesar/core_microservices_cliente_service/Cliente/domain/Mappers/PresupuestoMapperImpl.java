@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-11-07T10:18:41+0100",
+    date = "2024-11-07T12:02:52+0100",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.5 (Amazon.com Inc.)"
 )
 @Component
@@ -27,7 +27,6 @@ public class PresupuestoMapperImpl implements PresupuestoMapper {
         presupuesto.fecha_Creacion( presupuestoModel.getFecha_Creacion() );
         presupuesto.enabled( presupuestoModel.isEnabled() );
 
-        presupuesto.pk( presupuestoModel.getClientId() );
         presupuesto.sk( "presupuestoId" );
 
         return presupuesto.build();

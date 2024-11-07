@@ -9,9 +9,11 @@ import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.Cl
 import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.GastoModel;
 import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.PresupuestoModel;
 import gastos.core_microservice_gastos.Cliente.infraestructure.repository.port.GastosRepository;
+import gastos.core_microservice_gastos.shared.errorHandling.GenericErrorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -117,7 +119,6 @@ public class GastosUseCaseImpl implements GastosUseCase {
             throw new RuntimeException("El gasto con ID " + gastoModel.getGastoId() + " del cliente " + gastoModel.getClientId() + " no existe.");
         }
 
-        // Calcular la diferencia en la cantidad y ajustar el presupuesto
         double cantidadAnterior = gastoExistente.getCantidad();
         double cantidadNueva = gastoModel.getCantidad();
         double diferencia = cantidadNueva - cantidadAnterior;
@@ -133,7 +134,6 @@ public class GastosUseCaseImpl implements GastosUseCase {
             presupuestoServiceClient.sumar(gastoModel.getClientId(), Math.abs(diferencia));
         }
 
-        // Actualizar los datos del gasto existente con los valores de gastoModel usando el mapper
         gastoExistente.setCantidad(cantidadNueva);
         gastoExistente.setEstado(gastoModel.isEstado());
         gastosRepository.save(gastoExistente);
@@ -195,8 +195,13 @@ public class GastosUseCaseImpl implements GastosUseCase {
         Gasto gastoExistente = gastosRepository.findByGastoId(gastoModel.getClientId(), gastoModel.getGastoId());
         if (gastoExistente != null) {
             logger.error("El gasto con ID {} del cliente {} ya existe.", gastoModel.getGastoId(), gastoModel.getClientId());
-            throw new RuntimeException("El gasto con ID " + gastoModel.getGastoId() + " del cliente " + gastoModel.getClientId() + " ya existe.");
+
+            throw new GenericErrorException(
+                    "El gasto con ID " + gastoModel.getGastoId() + " del cliente " + gastoModel.getClientId() + " ya existe.",
+                    HttpStatus.CONFLICT
+            );
         }
+
 
         if (gastoModel.getGastoId() == null || gastoModel.getGastoId().isEmpty()) {
             gastoModel.setGastoId(UUID.randomUUID().toString());
