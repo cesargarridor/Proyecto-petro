@@ -28,16 +28,20 @@ public class GastosRepositoryImpl implements GastosRepository {
     @Override
     public Gasto findByGastoId(String clientId, String gastoId) {
         Map<String, AttributeValue> eav = new HashMap<>();
-        eav.put(":gastoId", new AttributeValue().withS(gastoId));
+        eav.put(":pk", new AttributeValue().withS(clientId));
 
         DynamoDBQueryExpression<Gasto> queryExpression = new DynamoDBQueryExpression<Gasto>()
-                .withIndexName("GI_PK")
-                .withKeyConditionExpression("PK = :gastoId")
-                .withExpressionAttributeValues(eav)
-                .withConsistentRead(false);
+                .withKeyConditionExpression("PK = :pk")
+                .withExpressionAttributeValues(eav);
 
         List<Gasto> result = dynamoDBMapper.query(Gasto.class, queryExpression);
-        return result.isEmpty() ? null : result.get(0);
+        for (Gasto gasto : result) {
+            if (gastoId.equals(gasto.getGastoId())) {
+                return gasto;
+            }
+        }
+
+        return null;
     }
 
 

@@ -20,4 +20,5 @@ public class GastoModel {
     private double cantidad;
 
     private boolean estado;
+    private String fechaCreacion;
 }

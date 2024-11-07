@@ -8,6 +8,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotBlank;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -38,6 +39,9 @@ public class Gasto extends MainTable{
     @NotBlank
     private boolean estado;
 
-
+    @ApiModelProperty(notes="Fecha",required = true,example = "true")
+    @DynamoDBAttribute(attributeName = "fechaCreacion")
+    @NotBlank
+    private Date fechaCreacion;
 
 }

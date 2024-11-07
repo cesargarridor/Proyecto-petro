@@ -43,30 +43,22 @@ public class ClienteUseCaseImpl implements ClientUseCase {
     public Cliente createCliente(ClienteModel clienteModel) {
         logger.info("Intentando crear un nuevo cliente con ID: {}", clienteModel.getClientId());
 
-        // Verifica si el cliente ya existe
         if (clienteRepository.findById(clienteModel.getClientId()) != null) {
             logger.error("El cliente con ID {} ya existe", clienteModel.getClientId());
             throw new RuntimeException("El cliente con ID " + clienteModel.getClientId() + " ya existe.");
         }
 
-        // Mapea ClienteModel a Cliente usando ClienteMapper
         Cliente cliente = ClienteMapper.INSTANCE.modelToEntity(clienteModel);
-        cliente.setgIndexPk(clienteModel.getNombre());
-        cliente.setgIndex2Pk(clienteModel.getCif());
-        cliente.setgIndex3Pk(clienteModel.getTelefono());
-        cliente.setId(clienteModel.getClientId());
 
-        // Guarda el cliente en el repositorio
+
         clienteRepository.save(cliente);
         logger.info("Cliente con ID {} creado exitosamente", clienteModel.getClientId());
 
-        // Crea el presupuesto si está presente en ClienteModel
         if (clienteModel.getPresupuesto() != null) {
             Presupuesto presupuesto = PresupuestoMapper.INSTANCE.modelToEntity(clienteModel.getPresupuesto());
+            System.out.println("a");
             presupuesto.setPk(cliente.getPk());
-            presupuesto.setSk(Presupuesto.PATTERN_SK);
 
-            // Guarda el presupuesto en el repositorio
             presupuestoRepository.save(presupuesto);
             logger.info("Presupuesto para el cliente con ID {} creado exitosamente", clienteModel.getClientId());
         }
