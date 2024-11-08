@@ -3,6 +3,7 @@ package gastos.core_microservice_gastos.Cliente.domain.Mappers;
 import gastos.core_microservice_gastos.Cliente.domain.Gasto;
 import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.GastoModel;
 import gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO.input.GastoInput;
+import gastos.core_microservice_gastos.shared.errorHandling.validators.FormatoCheck.FormatoCheck;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -17,6 +18,7 @@ public interface GastosMapper {
     @Mapping(target = "sk", expression = "java(Gasto.PATTERN_SK + gastoModel.getGastoId())")
     @Mapping(target = "gIndexPk", source = "gastoId")
     @Mapping(target="estado",constant="true")
+    @FormatoCheck
     @Mapping(target="fechaCreacion" ,source="fechaCreacion",dateFormat = "yyyy-MM-dd")
     Gasto modelToEntity(GastoModel gastoModel);
 

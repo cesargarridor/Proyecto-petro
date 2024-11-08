@@ -10,14 +10,18 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * Controlador que maneja las operaciones relacionadas con los gastos.
  */
 @RestController
 @RequestMapping("/gastos")
+@Validated
 public class GastosController {
 
     @Autowired
@@ -29,24 +33,13 @@ public class GastosController {
      * @param id El ID del cliente.
      * @return La entidad ClienteModel correspondiente al ID proporcionado.
      */
+    @ApiOperation(value = "Prueba para obtener un cliente por ID")
+    @ApiParam(value = "ID del cliente")
     @GetMapping("/prueba")
     public ResponseEntity<ClienteModel> prueba(@RequestParam String id) {
         ClienteModel cliente = gastosUseCase.obtenerClientePorId(id);
         return ResponseEntity.ok(cliente);
     }
-
-    /**
-     * Método para restar una cantidad del presupuesto de un cliente.
-     *
-     * @param id      El ID del cliente.
-     * @param cantidad La cantidad a restar.
-     * @return El modelo del presupuesto actualizado después de la resta.
-     */
-   /* @PostMapping("/restar")
-    public ResponseEntity<PresupuestoModel> restar(@RequestParam String id, @RequestParam double cantidad) {
-        PresupuestoModel presupuestoModel = gastosUseCase.restar(id, cantidad);
-        return ResponseEntity.ok(presupuestoModel);
-    }*/
 
     /**
      * Método para sumar una cantidad al presupuesto de un cliente.
@@ -55,8 +48,12 @@ public class GastosController {
      * @param cantidad La cantidad a sumar.
      * @return El modelo del presupuesto actualizado después de la suma.
      */
+    @ApiOperation(value = "Sumar una cantidad al presupuesto de un cliente")
+    @ApiParam(value = "ID del cliente")
     @PostMapping("/sumar")
-    public ResponseEntity<PresupuestoModel> sumar(@RequestParam String id, @RequestParam double cantidad) {
+    public ResponseEntity<PresupuestoModel> sumar(
+            @RequestParam String id,
+            @ApiParam(value = "Cantidad a sumar") @RequestParam double cantidad) {
         PresupuestoModel presupuestoModel = gastosUseCase.sumar(id, cantidad);
         return ResponseEntity.ok(presupuestoModel);
     }
@@ -67,6 +64,8 @@ public class GastosController {
      * @param id El ID del presupuesto.
      * @return El modelo del presupuesto correspondiente al ID proporcionado.
      */
+    @ApiOperation(value = "Buscar un presupuesto por su ID")
+    @ApiParam(value = "ID del presupuesto")
     @GetMapping("/buscarPorId")
     public ResponseEntity<PresupuestoModel> buscarPorId(@RequestParam String id) {
         PresupuestoModel presupuestoModel = gastosUseCase.buscarPorId(id);
@@ -79,13 +78,18 @@ public class GastosController {
      * @param gastoInput El modelo del gasto a crear.
      * @return El gasto creado.
      */
-    @Validated
-    @ApiOperation(value="Crear un nuevo gasto")
-    @ApiParam(value="Objeto para crear el nuevo gasto")
+
+    @ApiOperation(value = "Crear un nuevo gasto")
     @PostMapping("/crearGasto")
-    public ResponseEntity<Gasto> crearGasto(@RequestBody GastoInput gastoInput ) {
+    @ResponseBody
+    public ResponseEntity<Gasto> crearGasto(@ApiParam(value = "Objeto para crear el nuevo gasto") @Valid @RequestBody GastoInput gastoInput, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            System.out.println();
+
+        }
         Gasto gasto = gastosUseCase.guardarNuevoGasto(gastoInput);
         return ResponseEntity.ok(gasto);
+
     }
 
     /**
@@ -94,8 +98,9 @@ public class GastosController {
      * @param gastoModel El modelo del gasto a modificar.
      * @return El gasto actualizado.
      */
-    @PutMapping("/modificarGasto")
-    public ResponseEntity<Gasto> modificarGasto(@RequestBody GastoModel gastoModel) {
+    @ApiOperation(value = "Modificar un gasto existente")
+    @PostMapping("/modificarGasto")
+    public ResponseEntity<Gasto> modificarGasto(@ApiParam(value = "Modelo del gasto a modificar") @RequestBody GastoModel gastoModel) {
         Gasto gastoActualizao = gastosUseCase.modificarGasto(gastoModel);
         return ResponseEntity.ok(gastoActualizao);
     }
@@ -106,6 +111,8 @@ public class GastosController {
      * @param gastoModel El modelo del gasto cuya estado se va a modificar.
      * @return El gasto con el estado actualizado.
      */
+    @ApiOperation(value = "Modificar el estado de un gasto existente")
+    @ApiParam(value = "Modelo del gasto con el estado actualizado")
     @PutMapping("/modificarEstado")
     public ResponseEntity<Gasto> modificarEstado(@RequestBody GastoModel gastoModel) {
         Gasto gastoActualizao = gastosUseCase.modificarEstado(gastoModel);
@@ -118,6 +125,8 @@ public class GastosController {
      * @param id El ID del cliente.
      * @return La cantidad de dinero disponible en el presupuesto.
      */
+    @ApiOperation(value = "Obtener la cantidad de dinero disponible en el presupuesto de un cliente")
+    @ApiParam(value = "ID del cliente")
     @GetMapping("/getCantidadDinero")
     public ResponseEntity<Double> getCantidadDinero(@RequestParam String id) {
         Double cantidad = gastosUseCase.getCantidadPresupuesto(id);

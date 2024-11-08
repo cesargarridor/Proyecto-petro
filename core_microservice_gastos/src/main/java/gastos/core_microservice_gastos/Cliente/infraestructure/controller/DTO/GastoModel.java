@@ -1,7 +1,6 @@
 package gastos.core_microservice_gastos.Cliente.infraestructure.controller.DTO;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;

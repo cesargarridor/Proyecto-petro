@@ -2,6 +2,7 @@ package gastos.core_microservice_gastos.Cliente.domain;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import gastos.core_microservice_gastos.shared.errorHandling.validators.FormatoCheck.FormatoCheck;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -42,6 +43,7 @@ public class Gasto extends MainTable{
     @ApiModelProperty(notes="Fecha",required = true,example = "true")
     @DynamoDBAttribute(attributeName = "fechaCreacion")
     @NotBlank
+    @FormatoCheck
     private Date fechaCreacion;
 
 }
